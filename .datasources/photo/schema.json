@@ -1,0 +1,46 @@
+{
+  "name": "photo",
+  "title": "游客照片",
+  "schemas": [
+    {
+      "name": "userName",
+      "title": "用户姓名",
+      "type": "String"
+    },
+    {
+      "name": "avatar",
+      "title": "用户头像",
+      "type": "Image"
+    },
+    {
+      "name": "imageUrl",
+      "title": "照片URL",
+      "type": "Image"
+    },
+    {
+      "name": "caption",
+      "title": "照片说明",
+      "type": "MultiLineString"
+    },
+    {
+      "name": "likes",
+      "title": "点赞数",
+      "type": "Number"
+    },
+    {
+      "name": "comments",
+      "title": "评论数",
+      "type": "Number"
+    },
+    {
+      "name": "attractionId",
+      "title": "景点ID",
+      "type": "String"
+    },
+    {
+      "name": "userId",
+      "title": "用户ID",
+      "type": "String"
+    }
+  ]
+}

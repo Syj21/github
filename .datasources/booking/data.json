@@ -1,0 +1,24 @@
+[
+  {
+    "attractionName": "莫高窟",
+    "attractionId": "1",
+    "visitDate": "2026-01-25",
+    "ticketCount": 2,
+    "totalPrice": 476,
+    "ticketType": "成人票",
+    "userName": "张三",
+    "userId": "user123",
+    "status": "confirmed"
+  },
+  {
+    "attractionName": "鸣沙山月牙泉",
+    "attractionId": "2",
+    "visitDate": "2026-01-26",
+    "ticketCount": 1,
+    "totalPrice": 110,
+    "ticketType": "成人票",
+    "userName": "李四",
+    "userId": "user456",
+    "status": "confirmed"
+  }
+]

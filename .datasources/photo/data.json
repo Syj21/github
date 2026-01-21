@@ -1,0 +1,98 @@
+[
+  {
+    "_id": "1",
+    "userName": "旅行者小王",
+    "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=旅行者小王",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5f/Mogao_Caves_Entrance.jpg/400px-Mogao_Caves_Entrance.jpg",
+    "caption": "莫高窟的入口太壮观了！",
+    "likes": 128,
+    "comments": 23,
+    "attractionId": 1,
+    "createdAt": 1736995200000,
+    "updatedAt": 1736995200000
+  },
+  {
+    "_id": "2",
+    "userName": "摄影爱好者",
+    "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=摄影爱好者",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/8e/Crescent_Lake_-_Dunhuang_-_China.jpg/400px-Crescent_Lake_-_Dunhuang_-_China.jpg",
+    "caption": "夕阳下的月牙泉美得像画一样",
+    "likes": 256,
+    "comments": 45,
+    "attractionId": 2,
+    "createdAt": 1737081600000,
+    "updatedAt": 1737081600000
+  },
+  {
+    "_id": "3",
+    "userName": "沙漠行者",
+    "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=沙漠行者",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3a/Yardang_National_Geological_Park.jpg/400px-Yardang_National_Geological_Park.jpg",
+    "caption": "雅丹地貌的日落太震撼了，大自然的鬼斧神工！",
+    "likes": 189,
+    "comments": 32,
+    "attractionId": 4,
+    "createdAt": 1737168000000,
+    "updatedAt": 1737168000000
+  },
+  {
+    "_id": "4",
+    "userName": "历史迷",
+    "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=历史迷",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6a/Yumen_Pass.jpg/400px-Yumen_Pass.jpg",
+    "caption": "站在玉门关遗址上，仿佛穿越回了千年前的丝绸之路",
+    "likes": 145,
+    "comments": 28,
+    "attractionId": 3,
+    "createdAt": 1737254400000,
+    "updatedAt": 1737254400000
+  },
+  {
+    "_id": "5",
+    "userName": "文化探索者",
+    "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=文化探索者",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4e/Dunhuang_Museum.jpg/400px-Dunhuang_Museum.jpg",
+    "caption": "敦煌博物馆的展品太丰富了，每一件文物都在诉说着历史",
+    "likes": 167,
+    "comments": 19,
+    "attractionId": 5,
+    "createdAt": 1737340800000,
+    "updatedAt": 1737340800000
+  },
+  {
+    "_id": "6",
+    "userName": "日出追逐者",
+    "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=日出追逐者",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7a/Yangguan_Sunrise.jpg/400px-Yangguan_Sunrise.jpg",
+    "caption": "阳关的日出美得让人窒息，值得早起等待",
+    "likes": 203,
+    "comments": 37,
+    "attractionId": 6,
+    "createdAt": 1737427200000,
+    "updatedAt": 1737427200000
+  },
+  {
+    "_id": "7",
+    "userName": "美食家",
+    "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=美食家",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2c/Shazhou_Market_Night.jpg/400px-Shazhou_Market_Night.jpg",
+    "caption": "沙洲市场的夜景太热闹了，各种美食应有尽有！",
+    "likes": 278,
+    "comments": 52,
+    "attractionId": 7,
+    "createdAt": 1737513600000,
+    "updatedAt": 1737513600000
+  },
+  {
+    "_id": "8",
+    "userName": "佛教文化爱好者",
+    "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=佛教文化爱好者",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5c/Leiyin_Temple.jpg/400px-Leiyin_Temple.jpg",
+    "caption": "雷音寺的钟声让人心静，感受佛教文化的魅力",
+    "likes": 134,
+    "comments": 21,
+    "attractionId": 8,
+    "createdAt": 1737600000000,
+    "updatedAt": 1737600000000
+  }
+]

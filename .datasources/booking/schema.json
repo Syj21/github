@@ -1,0 +1,61 @@
+{
+  "name": "booking",
+  "displayName": "门票预订",
+  "description": "游客门票预订记录",
+  "fields": [
+    {
+      "name": "attractionName",
+      "displayName": "景点名称",
+      "type": "String",
+      "required": true
+    },
+    {
+      "name": "attractionId",
+      "displayName": "景点ID",
+      "type": "String",
+      "required": true
+    },
+    {
+      "name": "visitDate",
+      "displayName": "游览日期",
+      "type": "String",
+      "required": true
+    },
+    {
+      "name": "ticketCount",
+      "displayName": "票数",
+      "type": "Number",
+      "required": true
+    },
+    {
+      "name": "totalPrice",
+      "displayName": "总价",
+      "type": "Number",
+      "required": true
+    },
+    {
+      "name": "ticketType",
+      "displayName": "票种",
+      "type": "String",
+      "required": true
+    },
+    {
+      "name": "userName",
+      "displayName": "用户姓名",
+      "type": "String",
+      "required": true
+    },
+    {
+      "name": "userId",
+      "displayName": "用户ID",
+      "type": "String",
+      "required": true
+    },
+    {
+      "name": "status",
+      "displayName": "订单状态",
+      "type": "String",
+      "defaultValue": "confirmed"
+    }
+  ]
+}

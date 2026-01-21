@@ -1,15 +1,6 @@
 {
   "name": "openai-chat",
   "version": "1.0.0",
-  "description": "OpenAI 聊天云函数",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "dependencies": {
-    "@cloudbase/node-sdk": "^2.9.1",
-    "openai": "^4.20.1"
-  },
-  "author": "",
-  "license": "ISC"
+  "description": "AI chat function for Dunhuang tourism",
+  "main": "index.js"
 }

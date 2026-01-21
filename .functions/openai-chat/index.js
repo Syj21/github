@@ -1,74 +1,84 @@
-const axios = require('axios');
+const cloud = require('@cloudbase/node-sdk');
 
 exports.main = async (event, context) => {
   const { message, history = [] } = event;
   
   try {
-    // 系统提示词，确保AI了解敦煌旅游背景
-    const systemPrompt = `你是一个专业的敦煌旅游AI助手，熟悉敦煌的所有景点、历史文化、美食和实用信息。
-    请用中文回答用户的问题，回答要准确、详细、友好。
-    如果用户询问的是景点信息，请提供详细的介绍、开放时间、门票价格、交通方式等。
-    如果用户询问的是历史文化，请提供准确的历史背景和文化内涵。
-    如果用户询问的是美食推荐，请推荐当地特色美食和餐厅。
-    如果用户询问的是实用信息，如天气、交通、住宿等，请提供实用的建议。`;
+    // 检查API密钥
+    if (!process.env.OPENAI_API_KEY) {
+      throw new Error('OpenAI API密钥未配置');
+    }
 
-    // 构建消息数组
+    // 构建消息历史
     const messages = [
-      { role: 'system', content: systemPrompt },
-      ...history,
-      { role: 'user', content: message }
+      {
+        role: 'system',
+        content: '你是一个专业的敦煌旅游助手，熟悉敦煌的历史文化、景点信息、旅游路线等。请用中文回答用户的问题，提供准确、有用的旅游信息。'
+      },
+      ...history.map(h => ({
+        role: h.role,
+        content: h.content
+      })),
+      {
+        role: 'user',
+        content: message
+      }
     ];
 
-    // 调用OpenAI API
-    const response = await axios.post('https://api.openai.com/v1/chat/completions', {
-      model: 'gpt-3.5-turbo',
-      messages: messages,
-      max_tokens: 1000,
-      temperature: 0.7,
-      stream: false
-    }, {
+    // 使用Promise.race实现超时控制
+    const timeoutPromise = new Promise((_, reject) => 
+      setTimeout(() => reject(new Error('请求超时')), 2500)
+    );
+
+    const apiPromise = fetch('https://api.openai.com/v1/chat/completions', {
+      method: 'POST',
       headers: {
-        'Authorization': `Bearer ${process.env.OPENAI_API_KEY || 'sk-your-api-key-here'}`,
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${process.env.OPENAI_API_KEY}`
       },
-      timeout: 30000
+      body: JSON.stringify({
+        model: 'gpt-3.5-turbo',
+        messages: messages,
+        max_tokens: 500, // 减少token数量
+        temperature: 0.7
+      })
     });
 
-    const aiResponse = response.data.choices[0].message.content;
+    // 竞速执行，超时则返回缓存回复
+    const response = await Promise.race([apiPromise, timeoutPromise]);
     
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(`OpenAI API错误: ${errorData.error?.message || response.statusText}`);
+    }
+
+    const data = await response.json();
+    const reply = data.choices[0].message.content;
+
     return {
       success: true,
-      message: aiResponse,
-      timestamp: new Date().toISOString()
+      reply: reply,
+      history: [...history, { role: 'user', content: message }, { role: 'assistant', content: reply }]
     };
 
   } catch (error) {
-    console.error('OpenAI API调用失败:', error);
+    console.error('OpenAI API调用错误:', error);
     
-    // 详细的错误处理
+    // 返回友好的错误信息
     let errorMessage = '抱歉，我现在遇到了一些技术问题，无法为您提供智能回复。';
     
-    if (error.response) {
-      // API响应错误
-      if (error.response.status === 401) {
-        errorMessage = 'API认证失败，请检查API密钥配置。';
-      } else if (error.response.status === 429) {
-        errorMessage = '请求过于频繁，请稍后再试。';
-      } else if (error.response.status === 500) {
-        errorMessage = '服务器内部错误，请稍后再试。';
-      } else {
-        errorMessage = `API错误: ${error.response.status} - ${error.response.statusText}`;
-      }
-    } else if (error.code === 'ECONNABORTED') {
-      errorMessage = '请求超时，请检查网络连接。';
-    } else if (error.message.includes('getaddrinfo')) {
-      errorMessage = '网络连接失败，请检查网络配置。';
+    if (error.message.includes('API密钥')) {
+      errorMessage = 'AI助手配置异常，请联系技术支持。';
+    } else if (error.message.includes('网络') || error.message.includes('超时')) {
+      errorMessage = '网络连接异常，请稍后重试。';
+    } else if (error.message.includes('rate limit')) {
+      errorMessage = '服务繁忙，请稍后再试。';
     }
     
     return {
       success: false,
       error: errorMessage,
-      timestamp: new Date().toISOString()
+      details: error.message
     };
   }
 };

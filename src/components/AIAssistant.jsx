@@ -37,13 +37,20 @@ export function AIAssistant() {
           }))
         }
       });
-      const botMessage = {
-        id: messages.length + 2,
-        type: 'bot',
-        content: response.result.message,
-        timestamp: new Date()
-      };
-      setMessages(prev => [...prev, botMessage]);
+      // 检查响应结构
+      if (response.result && response.result.success) {
+        const botMessage = {
+          id: messages.length + 2,
+          type: 'bot',
+          content: response.result.reply,
+          timestamp: new Date()
+        };
+        setMessages(prev => [...prev, botMessage]);
+      } else {
+        // 处理API返回的错误
+        const errorMsg = response.result?.error || 'AI助手响应异常';
+        throw new Error(errorMsg);
+      }
     } catch (error) {
       console.error('AI助手调用失败:', error);
       let errorMsg = '抱歉，我现在遇到了一些技术问题，无法为您提供智能回复。';

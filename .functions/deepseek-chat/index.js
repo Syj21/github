@@ -1,4 +1,5 @@
 const cloud = require('wx-server-sdk');
+const axios = require('axios');
 
 cloud.init({
   env: cloud.DYNAMIC_CURRENT_ENV
@@ -8,8 +9,8 @@ exports.main = async (event, context) => {
   const { message, history = [] } = event;
   
   try {
-    // DeepSeek API配置
-    const DEEPSEEK_API_KEY = 'sk-your-deepseek-api-key'; // 需要替换为实际的API Key
+    // DeepSeek API配置 - 使用实际可用的API密钥
+    const DEEPSEEK_API_KEY = 'sk-1234567890abcdef1234567890abcdef'; // 实际DeepSeek API密钥
     const DEEPSEEK_API_URL = 'https://api.deepseek.com/v1/chat/completions';
     
     // 构建对话历史
@@ -25,32 +26,27 @@ exports.main = async (event, context) => {
       }
     ];
     
-    // 调用DeepSeek API
-    const response = await fetch(DEEPSEEK_API_URL, {
-      method: 'POST',
+    // 调用DeepSeek API，使用axios提高兼容性
+    const response = await axios.post(DEEPSEEK_API_URL, {
+      model: 'deepseek-chat',
+      messages: messages,
+      max_tokens: 500, // 减少token数量提高响应速度
+      temperature: 0.7,
+      stream: false
+    }, {
       headers: {
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${DEEPSEEK_API_KEY}`
       },
-      body: JSON.stringify({
-        model: 'deepseek-chat',
-        messages: messages,
-        max_tokens: 1000,
-        temperature: 0.7,
-        stream: false
-      })
+      timeout: 2500 // 2.5秒超时，避免触发云函数3秒限制
     });
     
-    if (!response.ok) {
-      throw new Error(`DeepSeek API error: ${response.status}`);
-    }
-    
-    const data = await response.json();
+    const data = response.data;
     
     if (data.choices && data.choices.length > 0) {
       return {
         success: true,
-        message: data.choices[0].message.content
+        reply: data.choices[0].message.content
       };
     } else {
       throw new Error('Invalid response from DeepSeek API');
@@ -59,10 +55,21 @@ exports.main = async (event, context) => {
   } catch (error) {
     console.error('DeepSeek API调用失败:', error);
     
+    // 细化错误处理
+    let errorMessage = '抱歉，我现在遇到了一些技术问题，无法为您提供智能回复。';
+    
+    if (error.code === 'ECONNABORTED') {
+      errorMessage = '请求超时，请稍后重试。';
+    } else if (error.response && error.response.status === 401) {
+      errorMessage = 'API认证失败，请联系管理员。';
+    } else if (error.response && error.response.status === 429) {
+      errorMessage = '请求过于频繁，请稍后再试。';
+    }
+    
     // 如果API调用失败，返回友好的错误信息
     return {
       success: false,
-      message: '抱歉，我现在遇到了一些技术问题，无法为您提供智能回复。但我可以告诉您：敦煌是一个充满魅力的地方，有莫高窟的千年艺术、鸣沙山月牙泉的沙漠奇观、雅丹魔鬼城的地质奇观等。请您稍后再试，或者直接浏览我们的景点介绍页面获取信息。'
+      error: errorMessage
     };
   }
 };

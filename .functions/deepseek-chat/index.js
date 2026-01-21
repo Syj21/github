@@ -9,9 +9,13 @@ exports.main = async (event, context) => {
   const { message, history = [] } = event;
   
   try {
-    // DeepSeek API配置 - 使用实际可用的API密钥
-    const DEEPSEEK_API_KEY = 'sk-1234567890abcdef1234567890abcdef'; // 实际DeepSeek API密钥
+    // DeepSeek API配置 - 从环境变量获取API密钥
+    const DEEPSEEK_API_KEY = process.env.DEEPSEEK_API_KEY || cloud.env.DEEPSEEK_API_KEY;
     const DEEPSEEK_API_URL = 'https://api.deepseek.com/v1/chat/completions';
+    
+    if (!DEEPSEEK_API_KEY) {
+      throw new Error('DeepSeek API密钥未配置，请在云开发环境变量中设置 DEEPSEEK_API_KEY');
+    }
     
     // 构建对话历史
     const messages = [

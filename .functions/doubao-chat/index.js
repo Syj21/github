@@ -8,9 +8,13 @@ exports.main = async (event, context) => {
   const { message, history = [] } = event;
   
   try {
-    // 豆包API配置 - 使用字节跳动的豆包大模型
-    const DOUBAO_API_KEY = 'sk-abcdef1234567890abcdef1234567890'; // 实际豆包API密钥
+    // 豆包API配置 - 从环境变量获取API密钥
+    const DOUBAO_API_KEY = process.env.DOUBAO_API_KEY || cloud.env.DOUBAO_API_KEY;
     const DOUBAO_API_URL = 'https://api.volcengineapi.com/v1/chat/completions';
+    
+    if (!DOUBAO_API_KEY) {
+      throw new Error('豆包API密钥未配置，请在云开发环境变量中设置 DOUBAO_API_KEY');
+    }
     
     // 构建对话历史
     const messages = [

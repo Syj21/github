@@ -11,12 +11,12 @@ exports.main = async (event, context) => {
       timeout: 25000 // 25秒超时
     });
     
-    // 获取环境变量中的OpenAI配置，如果未配置则使用备用密钥
+    // 获取环境变量中的OpenAI配置
     const env = app.env;
-    const openaiApiKey = env.OPENAI_API_KEY || process.env.OPENAI_API_KEY || 'sk-1234567890abcdef1234567890abcdef';
+    const openaiApiKey = env.OPENAI_API_KEY || process.env.OPENAI_API_KEY;
     
     if (!openaiApiKey) {
-      throw new Error('OpenAI API密钥未配置');
+      throw new Error('OpenAI API密钥未配置，请在云开发环境变量中设置 OPENAI_API_KEY');
     }
     
     // 初始化OpenAI客户端

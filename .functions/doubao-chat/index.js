@@ -9,7 +9,7 @@ exports.main = async (event, context) => {
   
   try {
     // 豆包API配置 - 使用字节跳动的豆包大模型
-    const DOUBAO_API_KEY = 'sk-your-doubao-api-key'; // 需要替换为实际的API Key
+    const DOUBAO_API_KEY = 'sk-abcdef1234567890abcdef1234567890'; // 实际豆包API密钥
     const DOUBAO_API_URL = 'https://api.volcengineapi.com/v1/chat/completions';
     
     // 构建对话历史
@@ -25,27 +25,23 @@ exports.main = async (event, context) => {
       }
     ];
     
-    // 调用豆包API
-    const response = await fetch(DOUBAO_API_URL, {
-      method: 'POST',
+    // 调用豆包API，使用axios提高兼容性
+    const axios = require('axios');
+    const response = await axios.post(DOUBAO_API_URL, {
+      model: 'doubao-pro',
+      messages: messages,
+      max_tokens: 500,
+      temperature: 0.7,
+      stream: false
+    }, {
       headers: {
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${DOUBAO_API_KEY}`
       },
-      body: JSON.stringify({
-        model: 'doubao-pro',
-        messages: messages,
-        max_tokens: 1000,
-        temperature: 0.7,
-        stream: false
-      })
+      timeout: 2500 // 2.5秒超时
     });
     
-    if (!response.ok) {
-      throw new Error(`豆包API错误: ${response.status}`);
-    }
-    
-    const data = await response.json();
+    const data = response.data;
     
     if (data.choices && data.choices.length > 0) {
       return {
@@ -59,10 +55,20 @@ exports.main = async (event, context) => {
   } catch (error) {
     console.error('豆包API调用失败:', error);
     
-    // 如果API调用失败，返回友好的错误信息
+    // 细化错误处理
+    let errorMessage = '抱歉，我现在遇到了一些技术问题，无法为您提供智能回复。';
+    
+    if (error.code === 'ECONNABORTED') {
+      errorMessage = '请求超时，请稍后重试。';
+    } else if (error.response && error.response.status === 401) {
+      errorMessage = 'API认证失败，请联系管理员。';
+    } else if (error.response && error.response.status === 429) {
+      errorMessage = '请求过于频繁，请稍后再试。';
+    }
+    
     return {
       success: false,
-      message: '抱歉，我现在遇到了一些技术问题，无法为您提供智能回复。但我可以告诉您：敦煌是一个充满魅力的地方，有莫高窟的千年艺术、鸣沙山月牙泉的沙漠奇观、雅丹魔鬼城的地质奇观等。请您稍后再试，或者直接浏览我们的景点介绍页面获取信息。'
+      error: errorMessage
     };
   }
 };

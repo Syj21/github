@@ -1,6 +1,6 @@
 {
   "name": "openai-chat",
   "version": "1.0.0",
-  "description": "AI chat function for Dunhuang tourism",
-  "main": "index.js"
+  "main": "index.js",
+  "dependencies": {}
 }

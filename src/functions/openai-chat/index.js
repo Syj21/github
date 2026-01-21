@@ -1,67 +1,81 @@
-// 敦煌旅游知识库
-const dunhuangKnowledge = {
-  莫高窟: {
-    keywords: ['莫高窟', '千佛洞', '石窟', '壁画', '佛像'],
-    response: '莫高窟是世界文化遗产，被誉为"东方卢浮宫"。现存735个洞窟，45000平方米壁画，2400多尊彩塑。建议游览时间3-4小时，旺季需要提前预约门票。'
-  },
-  最佳时间: {
-    keywords: ['最佳时间', '什么时候', '季节', '月份'],
-    response: '敦煌最佳旅游时间是5-6月和9-10月，气候适宜，避开严寒和酷暑。7-8月较热但可欣赏沙漠日出日落，冬季人少景美但较寒冷。'
-  },
-  博物馆: {
-    keywords: ['博物馆', '敦煌博物馆', '文物', '历史'],
-    response: '敦煌博物馆收藏了大量珍贵文物，包括汉代简牍、丝绸织品、佛教文物等。免费开放，建议游览1-2小时，可深入了解敦煌历史文化。'
-  },
-  美食: {
-    keywords: ['美食', '吃什么', '特色', '小吃', '推荐'],
-    response: '敦煌特色美食有驴肉黄面、酿皮子、泡儿油糕、杏皮水等。推荐到沙洲夜市品尝当地小吃，体验丝路美食文化。'
-  },
-  鸣沙山: {
-    keywords: ['鸣沙山', '月牙泉', '沙漠', '骆驼', '滑沙'],
-    response: '鸣沙山月牙泉是敦煌标志性景点，可骑骆驼、滑沙、看日落。建议傍晚前往，避开正午高温。门票120元，可多次进出。'
-  }
-};
-
 exports.main = async (event, context) => {
   const { message, history = [] } = event;
   
   try {
-    // 智能匹配关键词
-    const lowerMessage = message.toLowerCase();
-    let bestMatch = null;
-    let maxScore = 0;
-    
-    for (const [topic, data] of Object.entries(dunhuangKnowledge)) {
-      for (const keyword of data.keywords) {
-        if (lowerMessage.includes(keyword)) {
-          const score = keyword.length;
-          if (score > maxScore) {
-            maxScore = score;
-            bestMatch = data.response;
+    // 使用 fetch API 调用 OpenAI 接口
+    const response = await fetch('https://api.openai.com/v1/chat/completions', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${process.env.OPENAI_API_KEY || 'sk-your-api-key-here'}`
+      },
+      body: JSON.stringify({
+        model: 'gpt-3.5-turbo',
+        messages: [
+          {
+            role: 'system',
+            content: '你是一个专业的敦煌旅游助手，请用中文回答用户关于敦煌旅游的问题，回答要简洁友好。'
+          },
+          ...history.slice(-10),
+          {
+            role: 'user',
+            content: message
           }
-        }
-      }
+        ],
+        max_tokens: 500,
+        temperature: 0.7
+      }),
+      timeout: 2500 // 2.5秒超时，避免触发云函数3秒限制
+    });
+
+    if (!response.ok) {
+      throw new Error(`OpenAI API 错误: ${response.status}`);
     }
+
+    const data = await response.json();
+    const reply = data.choices[0].message.content;
+
+    return {
+      success: true,
+      reply: reply,
+      timestamp: new Date().toISOString()
+    };
+
+  } catch (error) {
+    console.error('OpenAI API 调用失败:', error);
     
-    // 如果没有匹配到，提供通用回复
-    const response = bestMatch || '您好！我是敦煌AI助手，可以为您提供关于莫高窟、鸣沙山、月牙泉、敦煌博物馆、美食推荐、最佳旅游时间等方面的专业建议。请问有什么可以帮助您的吗？';
+    // 如果API调用失败，返回本地智能回复
+    const localReply = getLocalReply(message);
     
     return {
       success: true,
-      data: {
-        response: response,
-        timestamp: new Date().toISOString()
-      }
-    };
-    
-  } catch (error) {
-    console.error('AI助手处理失败:', error);
-    return {
-      success: false,
-      error: {
-        message: 'AI助手暂时无法回复，请稍后重试',
-        details: error.message
-      }
+      reply: localReply,
+      timestamp: new Date().toISOString(),
+      fallback: true
     };
   }
 };
+
+// 本地智能回复函数
+function getLocalReply(message) {
+  const keywords = {
+    '莫高窟': '莫高窟是敦煌最著名的景点，建议提前网上预约门票，参观时间约2-3小时。洞窟内禁止拍照，请遵守规定。',
+    '鸣沙山': '鸣沙山月牙泉是敦煌必游景点，最佳游览时间是傍晚，可以骑骆驼、滑沙，欣赏沙漠日落美景。',
+    '月牙泉': '月牙泉位于鸣沙山环抱之中，泉水清澈千年不涸，与鸣沙山形成沙不填泉的奇观。',
+    '最佳时间': '敦煌最佳旅游时间是5-10月，气候适宜。避开7-8月高温季节，春秋两季最为舒适。',
+    '博物馆': '敦煌博物馆免费开放，展示了丰富的敦煌历史文物，建议安排1-2小时参观。',
+    '美食': '敦煌特色美食有驴肉黄面、杏皮水、酿皮子、泡儿油糕等，推荐到沙州夜市品尝。',
+    '住宿': '敦煌市区住宿选择丰富，从经济型酒店到高端民宿都有，建议提前预订。',
+    '交通': '敦煌有机场和火车站，市内可打车或乘坐公交，主要景点都有旅游专线。'
+  };
+
+  // 关键词匹配
+  for (const [key, reply] of Object.entries(keywords)) {
+    if (message.includes(key)) {
+      return reply;
+    }
+  }
+
+  // 默认回复
+  return '您好！我是敦煌旅游智能助手，可以为您解答关于莫高窟、鸣沙山、月牙泉等景点的问题，也可以提供美食、住宿、交通等旅游建议。请问有什么可以帮助您的吗？';
+}

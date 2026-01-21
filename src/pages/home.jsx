@@ -1,7 +1,7 @@
 // @ts-ignore;
 import React, { useState, useEffect } from 'react';
 // @ts-ignore;
-import { Camera, Star, MapPin, ArrowRight, Sparkles, Compass, Calendar, Users } from 'lucide-react';
+import { Camera, Star, MapPin, ArrowRight, Sparkles, Compass, Calendar, Users, Home as HomeIcon } from 'lucide-react';
 
 import { AttractionCard } from '@/components/AttractionCard';
 import { AttractionNav } from '@/components/AttractionNav';
@@ -14,6 +14,12 @@ export default function Home(props) {
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
+  const handleBackToWelcome = () => {
+    props.$w.utils.navigateTo({
+      pageId: 'welcome',
+      params: {}
+    });
+  };
   const attractions = [{
     id: 1,
     name: '莫高窟',
@@ -121,6 +127,16 @@ export default function Home(props) {
 
       {/* 主内容区域 */}
       <div className="min-h-screen bg-[#FDF8F3]">
+      {/* 返回首页按钮 */}
+      <div className="fixed top-6 left-6 z-50">
+        <button onClick={handleBackToWelcome} className="bg-white/20 backdrop-blur-sm border border-white/30 text-white px-4 py-2 rounded-full font-medium hover:bg-white/30 transition-all duration-300 flex items-center gap-2 shadow-lg" style={{
+          fontFamily: 'Noto Sans SC, sans-serif'
+        }}>
+          <HomeIcon className="w-4 h-4" />
+          返回首页
+        </button>
+      </div>
+      
       {/* Hero Section - 全屏英雄区域 */}
       <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
         {/* 背景图片层 */}

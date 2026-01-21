@@ -38,6 +38,31 @@ export function AIAssistant() {
         },
         timeout: 25000 // 25秒超时
       });
+
+      // 如果DeepSeek失败，尝试豆包API作为备用
+      if (!response.result || !response.result.success) {
+        const doubaoResponse = await $w.cloud.callFunction({
+          name: 'doubao-chat',
+          data: {
+            message: currentInput,
+            history: messages.slice(-10).map(msg => ({
+              role: msg.type === 'user' ? 'user' : 'assistant',
+              content: msg.content
+            }))
+          },
+          timeout: 25000
+        });
+        if (doubaoResponse.result && doubaoResponse.result.success) {
+          const botMessage = {
+            id: messages.length + 2,
+            type: 'bot',
+            content: doubaoResponse.result.reply,
+            timestamp: new Date()
+          };
+          setMessages(prev => [...prev, botMessage]);
+          return;
+        }
+      }
       // 检查响应结构
       if (response.result && response.result.success) {
         const botMessage = {
@@ -61,6 +86,11 @@ export function AIAssistant() {
         errorMsg = error.result.error;
       } else if (error.message) {
         errorMsg = error.message;
+      }
+
+      // 提供具体的配置指导
+      if (errorMsg.includes('API密钥未配置')) {
+        errorMsg = 'AI助手需要配置API密钥才能工作。请管理员在云开发控制台的环境变量中设置以下密钥：\n- DEEPSEEK_API_KEY\n- DOUBAO_API_KEY\n- OPENAI_API_KEY';
       }
       const errorMessage = {
         id: messages.length + 2,

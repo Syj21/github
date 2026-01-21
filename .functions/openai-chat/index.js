@@ -1,4 +1,4 @@
-const cloud = require('@cloudbase/node-sdk');
+const axios = require('axios');
 
 exports.main = async (event, context) => {
   const { message, history = [] } = event;
@@ -25,60 +25,46 @@ exports.main = async (event, context) => {
       }
     ];
 
-    // 使用Promise.race实现超时控制
-    const timeoutPromise = new Promise((_, reject) => 
-      setTimeout(() => reject(new Error('请求超时')), 2500)
-    );
-
-    const apiPromise = fetch('https://api.openai.com/v1/chat/completions', {
-      method: 'POST',
+    // 使用axios进行API调用，设置2.5秒超时
+    const response = await axios.post('https://api.openai.com/v1/chat/completions', {
+      model: 'gpt-3.5-turbo',
+      messages: messages,
+      max_tokens: 500,
+      temperature: 0.7
+    }, {
       headers: {
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${process.env.OPENAI_API_KEY}`
       },
-      body: JSON.stringify({
-        model: 'gpt-3.5-turbo',
-        messages: messages,
-        max_tokens: 500, // 减少token数量
-        temperature: 0.7
-      })
+      timeout: 2500 // 2.5秒超时
     });
 
-    // 竞速执行，超时则返回缓存回复
-    const response = await Promise.race([apiPromise, timeoutPromise]);
+    const reply = response.data.choices[0].message.content;
     
-    if (!response.ok) {
-      const errorData = await response.json();
-      throw new Error(`OpenAI API错误: ${errorData.error?.message || response.statusText}`);
-    }
-
-    const data = await response.json();
-    const reply = data.choices[0].message.content;
-
     return {
       success: true,
-      reply: reply,
-      history: [...history, { role: 'user', content: message }, { role: 'assistant', content: reply }]
+      data: {
+        reply: reply,
+        history: [...history, { role: 'user', content: message }, { role: 'assistant', content: reply }]
+      }
     };
-
+    
   } catch (error) {
     console.error('OpenAI API调用错误:', error);
     
-    // 返回友好的错误信息
-    let errorMessage = '抱歉，我现在遇到了一些技术问题，无法为您提供智能回复。';
+    let errorMessage = 'AI助手暂时无法回复，请稍后重试。';
     
-    if (error.message.includes('API密钥')) {
-      errorMessage = 'AI助手配置异常，请联系技术支持。';
-    } else if (error.message.includes('网络') || error.message.includes('超时')) {
+    if (error.code === 'ECONNABORTED' || error.message.includes('timeout')) {
       errorMessage = '网络连接异常，请稍后重试。';
-    } else if (error.message.includes('rate limit')) {
-      errorMessage = '服务繁忙，请稍后再试。';
+    } else if (error.response?.status === 401) {
+      errorMessage = '服务配置异常，请联系管理员。';
+    } else if (error.response?.status === 429) {
+      errorMessage = '服务繁忙，请稍后重试。';
     }
     
     return {
       success: false,
-      error: errorMessage,
-      details: error.message
+      error: errorMessage
     };
   }
 };

@@ -8,6 +8,7 @@ import YANGGUAN from '../pages/yangguan.jsx';
 import SHAZHOU_MARKET from '../pages/shazhou_market.jsx';
 import SILKROAD_HERITAGE from '../pages/silkroad_heritage.jsx';
 import LEIYIN_TEMPLE from '../pages/leiyin_temple.jsx';
+import LANDING from '../pages/landing.jsx';
 export const routers = [{
   id: "home",
   component: HOME
@@ -38,4 +39,7 @@ export const routers = [{
 }, {
   id: "leiyin_temple",
   component: LEIYIN_TEMPLE
+}, {
+  id: "landing",
+  component: LANDING
 }]

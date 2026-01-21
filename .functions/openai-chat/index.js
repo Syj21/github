@@ -1,44 +1,85 @@
+const cloud = require('@cloudbase/node-sdk');
+const OpenAI = require('openai');
+
 exports.main = async (event, context) => {
   const { message, history = [] } = event;
   
   try {
-    // 使用模拟响应，避免API调用超时
-    const mockResponses = [
-      "欢迎来到敦煌！我是您的AI旅游助手。敦煌莫高窟是世界文化遗产，拥有精美的壁画和雕塑，建议您提前预约参观。",
-      "敦煌的最佳旅游时间是4-10月，气候适宜。莫高窟、鸣沙山月牙泉、阳关遗址都是必游景点。",
-      "如果您对敦煌的历史文化感兴趣，我推荐您参观敦煌博物馆，那里有丰富的文物展览。",
-      "敦煌的美食也很有特色，比如驴肉黄面、酿皮子、泡儿油糕等，值得一试！",
-      "鸣沙山月牙泉是敦煌的标志性景点，您可以体验骑骆驼、滑沙等项目，记得带好防晒用品。"
+    // 初始化云开发环境
+    const app = cloud.init({
+      env: cloud.SYMBOL_CURRENT_ENV,
+      timeout: 25000 // 25秒超时
+    });
+    
+    // 获取环境变量中的OpenAI配置
+    const env = app.env;
+    const openaiApiKey = env.OPENAI_API_KEY || process.env.OPENAI_API_KEY;
+    
+    if (!openaiApiKey) {
+      throw new Error('OpenAI API密钥未配置');
+    }
+    
+    // 初始化OpenAI客户端
+    const openai = new OpenAI({
+      apiKey: openaiApiKey,
+      timeout: 20000, // 20秒超时
+      maxRetries: 2
+    });
+    
+    // 构建消息历史
+    const messages = [
+      {
+        role: 'system',
+        content: '你是敦煌旅游的AI助手，专门帮助游客了解敦煌的历史文化、景点信息、旅游建议等。请用中文回复，回答要简洁友好。'
+      },
+      ...history.map(h => ({
+        role: h.role,
+        content: h.content
+      })),
+      {
+        role: 'user',
+        content: message
+      }
     ];
     
-    // 根据消息内容选择不同的模拟回复
-    let response;
-    if (message.includes('莫高窟') || message.includes('石窟')) {
-      response = mockResponses[0];
-    } else if (message.includes('时间') || message.includes('季节')) {
-      response = mockResponses[1];
-    } else if (message.includes('博物馆') || message.includes('历史')) {
-      response = mockResponses[2];
-    } else if (message.includes('美食') || message.includes('吃')) {
-      response = mockResponses[3];
-    } else if (message.includes('鸣沙山') || message.includes('月牙泉')) {
-      response = mockResponses[4];
-    } else {
-      response = mockResponses[Math.floor(Math.random() * mockResponses.length)];
-    }
+    // 调用OpenAI API
+    const completion = await openai.chat.completions.create({
+      model: 'gpt-3.5-turbo',
+      messages: messages,
+      max_tokens: 500,
+      temperature: 0.7,
+      stream: false
+    });
+    
+    const reply = completion.choices[0]?.message?.content || '抱歉，我没有理解您的问题。';
     
     return {
       success: true,
-      response: response,
+      reply: reply,
       timestamp: new Date().toISOString()
     };
 
   } catch (error) {
-    console.error('AI助手错误:', error);
+    console.error('OpenAI API错误:', error);
+    
+    // 处理不同类型的错误
+    let errorMessage = 'AI助手暂时无法回复，请稍后重试。';
+    
+    if (error.code === 'ENOTFOUND' || error.code === 'ECONNREFUSED') {
+      errorMessage = '网络连接失败，请检查网络后重试。';
+    } else if (error.code === 'ETIMEDOUT') {
+      errorMessage = '请求超时，请稍后重试。';
+    } else if (error.status === 401) {
+      errorMessage = 'API认证失败，请联系管理员。';
+    } else if (error.status === 429) {
+      errorMessage = '请求过于频繁，请稍后再试。';
+    } else if (error.message) {
+      errorMessage = error.message;
+    }
     
     return {
       success: false,
-      error: 'AI助手暂时无法回复，请稍后重试。'
+      error: errorMessage
     };
   }
 };

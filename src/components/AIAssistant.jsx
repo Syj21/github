@@ -26,7 +26,7 @@ export function AIAssistant() {
     setInputValue('');
     setIsTyping(true);
     try {
-      // 调用OpenAI云函数
+      // 调用OpenAI云函数，设置超时时间为25秒
       const response = await $w.cloud.callFunction({
         name: 'openai-chat',
         data: {
@@ -35,7 +35,8 @@ export function AIAssistant() {
             role: msg.type === 'user' ? 'user' : 'assistant',
             content: msg.content
           }))
-        }
+        },
+        timeout: 25000 // 25秒超时
       });
       // 检查响应结构
       if (response.result && response.result.success) {

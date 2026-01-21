@@ -174,7 +174,7 @@ export default function Home(props) {
             fontFamily: 'Noto Serif SC, serif',
             textShadow: '0 4px 20px rgba(0,0,0,0.3)'
           }}>
-            敦煌之旅
+            敦煌探索
           </h1>
           
           {/* 副标题 */}

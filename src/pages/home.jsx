@@ -1,12 +1,19 @@
 // @ts-ignore;
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 // @ts-ignore;
-import { Camera, Star } from 'lucide-react';
+import { Camera, Star, MapPin, ArrowRight, Sparkles, Compass, Calendar, Users } from 'lucide-react';
 
 import { AttractionCard } from '@/components/AttractionCard';
 import { AttractionNav } from '@/components/AttractionNav';
 import { AIAssistant } from '@/components/AIAssistant';
 export default function Home(props) {
+  const [scrollY, setScrollY] = useState(0);
+  const [activeSection, setActiveSection] = useState('hero');
+  useEffect(() => {
+    const handleScroll = () => setScrollY(window.scrollY);
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
   const attractions = [{
     id: 1,
     name: '莫高窟',
@@ -91,76 +98,228 @@ export default function Home(props) {
       });
     }
   };
+  const stats = [{
+    icon: MapPin,
+    label: '9大景点',
+    value: '9+'
+  }, {
+    icon: Calendar,
+    label: '千年历史',
+    value: '2000+'
+  }, {
+    icon: Users,
+    label: '年度游客',
+    value: '100万+'
+  }, {
+    icon: Star,
+    label: '世界遗产',
+    value: '1'
+  }];
   return <>
       {/* AI助手 */}
       <AIAssistant />
 
       {/* 主内容区域 */}
       <div className="min-h-screen bg-[#FDF8F3]">
-      {/* Header */}
-      <header className="bg-gradient-to-r from-[#D4A574] to-[#E8A849] py-8 px-6 shadow-lg">
-        <div className="max-w-6xl mx-auto">
-          <h1 className="text-4xl md:text-5xl font-bold text-white mb-2" style={{
-            fontFamily: 'Noto Serif SC, serif'
+      {/* Hero Section - 全屏英雄区域 */}
+      <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
+        {/* 背景图片层 */}
+        <div className="absolute inset-0 bg-gradient-to-br from-[#D4A574] via-[#E8A849] to-[#C41E3A] opacity-90" />
+        <div className="absolute inset-0 bg-[url('https://img.meituan.net/leadinimg/ca07377679d77f6f670af04873c5a742265208.webp%40watermark%3D0')] bg-cover bg-center opacity-30" />
+        
+        {/* 装饰性几何元素 */}
+        <div className="absolute top-20 right-20 w-64 h-64 border-4 border-white/20 rounded-full animate-pulse" />
+        <div className="absolute bottom-20 left-20 w-48 h-48 border-4 border-white/20 rounded-full" style={{
+          animation: 'pulse 3s ease-in-out infinite'
+        }} />
+        <div className="absolute top-1/3 left-1/4 w-32 h-32 bg-white/10 rotate-45" />
+        <div className="absolute bottom-1/3 right-1/4 w-40 h-40 bg-white/10 rotate-12" />
+        
+        {/* 粒子效果 */}
+        <div className="absolute inset-0 overflow-hidden">
+          {[...Array(20)].map((_, i) => <div key={i} className="absolute w-2 h-2 bg-white/30 rounded-full animate-pulse" style={{
+            top: `${Math.random() * 100}%`,
+            left: `${Math.random() * 100}%`,
+            animationDelay: `${Math.random() * 2}s`
+          }} />)}
+        </div>
+
+        {/* 主内容 */}
+        <div className="relative z-10 text-center px-6 max-w-5xl">
+          {/* 装饰性图标 */}
+          <div className="flex justify-center mb-8">
+            <div className="bg-white/20 backdrop-blur-sm p-4 rounded-full">
+              <Sparkles className="w-12 h-12 text-white" />
+            </div>
+          </div>
+
+          {/* 主标题 */}
+          <h1 className="text-6xl md:text-8xl font-bold text-white mb-6 leading-tight" style={{
+            fontFamily: 'Noto Serif SC, serif',
+            textShadow: '0 4px 20px rgba(0,0,0,0.3)'
           }}>
             敦煌之旅
           </h1>
-          <p className="text-white/90 text-lg" style={{
-            fontFamily: 'Noto Sans SC, sans-serif'
+          
+          {/* 副标题 */}
+          <p className="text-xl md:text-2xl text-white/90 mb-8 max-w-3xl mx-auto" style={{
+            fontFamily: 'Noto Sans SC, sans-serif',
+            textShadow: '0 2px 10px rgba(0,0,0,0.2)'
           }}>
             探索千年丝路文化，感受大漠风情
           </p>
+
+          {/* 统计数据 */}
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-12">
+            {stats.map((stat, index) => <div key={index} className="bg-white/10 backdrop-blur-sm rounded-xl p-4 border border-white/20 hover:bg-white/20 transition-all duration-300">
+                <stat.icon className="w-6 h-6 text-white mx-auto mb-2" />
+                <div className="text-2xl font-bold text-white" style={{
+                fontFamily: 'Noto Serif SC, serif'
+              }}>
+                  {stat.value}
+                </div>
+                <div className="text-sm text-white/80" style={{
+                fontFamily: 'Noto Sans SC, sans-serif'
+              }}>
+                  {stat.label}
+                </div>
+              </div>)}
+          </div>
+
+          {/* CTA按钮 */}
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <button onClick={() => window.scrollTo({
+              top: 800,
+              behavior: 'smooth'
+            })} className="bg-white text-[#D4A574] px-8 py-4 rounded-full font-bold text-lg hover:bg-[#FDF8F3] transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-1" style={{
+              fontFamily: 'Noto Sans SC, sans-serif'
+            }}>
+              开始探索
+              <ArrowRight className="inline ml-2 w-5 h-5" />
+            </button>
+            <button onClick={() => window.scrollTo({
+              top: 800,
+              behavior: 'smooth'
+            })} className="bg-transparent border-2 border-white text-white px-8 py-4 rounded-full font-bold text-lg hover:bg-white/10 transition-all duration-300" style={{
+              fontFamily: 'Noto Sans SC, sans-serif'
+            }}>
+              了解更多
+            </button>
+          </div>
         </div>
-      </header>
+
+        {/* 滚动提示 */}
+        <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce">
+          <div className="w-6 h-10 border-2 border-white/50 rounded-full flex justify-center pt-2">
+            <div className="w-1.5 h-3 bg-white/70 rounded-full animate-pulse" />
+          </div>
+        </div>
+      </section>
 
       {/* Main Content */}
-      <main className="max-w-6xl mx-auto px-6 py-12">
+      <main className="max-w-7xl mx-auto px-6 py-16">
         {/* Attraction Navigation */}
-        <AttractionNav attractions={attractions} onNavigate={handleNavigate} />
+        <div className="mb-16">
+          <AttractionNav attractions={attractions} onNavigate={handleNavigate} />
+        </div>
 
-        {/* Section Title */}
-        <div className="mb-10">
-          <h2 className="text-3xl font-bold text-[#2C2C2C] mb-2" style={{
+        {/* Section Title with decorative elements */}
+        <div className="mb-12 relative">
+          <div className="flex items-center gap-4 mb-4">
+            <div className="w-16 h-1 bg-gradient-to-r from-[#D4A574] to-[#E8A849]" />
+            <Compass className="w-8 h-8 text-[#D4A574]" />
+            <div className="flex-1 h-1 bg-gradient-to-r from-[#E8A849] to-transparent" />
+          </div>
+          <h2 className="text-4xl md:text-5xl font-bold text-[#2C2C2C] mb-4" style={{
             fontFamily: 'Noto Serif SC, serif'
           }}>
             热门景点
           </h2>
-          <div className="w-24 h-1 bg-[#D4A574] rounded"></div>
+          <p className="text-[#2C2C2C]/70 text-lg max-w-2xl" style={{
+            fontFamily: 'Noto Sans SC, sans-serif'
+          }}>
+            探索敦煌的九大必游景点，每一处都承载着千年的历史与文化
+          </p>
         </div>
 
-        {/* Attractions Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          {attractions.map(attraction => <AttractionCard key={attraction.id} attraction={attraction} onClick={() => handleNavigate(attraction.id)} />)}
+        {/* Attractions Grid - 非对称布局 */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {attractions.map((attraction, index) => <div key={attraction.id} className={`transform transition-all duration-500 hover:scale-105 ${index % 3 === 0 ? 'md:translate-y-8' : index % 3 === 1 ? 'md:translate-y-0' : 'md:translate-y-4'}`}>
+              <AttractionCard attraction={attraction} onClick={() => handleNavigate(attraction.id)} />
+            </div>)}
         </div>
 
-        {/* Info Section */}
-        <div className="mt-16 bg-white rounded-2xl p-8 shadow-lg border-l-4 border-[#D4A574]">
-          <div className="flex items-start gap-4">
-            <div className="bg-[#D4A574]/10 p-3 rounded-full">
-              <Camera className="w-6 h-6 text-[#D4A574]" />
-            </div>
-            <div>
-              <h3 className="text-xl font-bold text-[#2C2C2C] mb-2" style={{
-                fontFamily: 'Noto Serif SC, serif'
-              }}>
-                关于敦煌
-              </h3>
-              <p className="text-[#2C2C2C]/80 leading-relaxed" style={{
-                fontFamily: 'Noto Sans SC, sans-serif'
-              }}>
-                敦煌，位于甘肃省西北部，是古丝绸之路上的重镇，也是东西方文化交流的枢纽。
-                这里拥有莫高窟、鸣沙山月牙泉、玉门关、阳关等众多历史文化遗迹，是感受中华文明
-                和丝路文化的绝佳之地。
-              </p>
+        {/* Info Section - 增强视觉冲击 */}
+        <div className="mt-24 relative">
+          {/* 装饰性背景 */}
+          <div className="absolute inset-0 bg-gradient-to-r from-[#D4A574]/10 to-[#E8A849]/10 rounded-3xl transform rotate-1" />
+          
+          <div className="relative bg-white rounded-3xl p-10 shadow-2xl border-l-8 border-[#D4A574] overflow-hidden">
+            {/* 装饰性元素 */}
+            <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-[#D4A574]/20 to-[#E8A849]/20 rounded-bl-full" />
+            <div className="absolute bottom-0 left-0 w-24 h-24 bg-gradient-to-tr from-[#E8A849]/20 to-[#C41E3A]/20 rounded-tr-full" />
+            
+            <div className="relative z-10">
+              <div className="flex items-start gap-6">
+                <div className="bg-gradient-to-br from-[#D4A574] to-[#E8A849] p-4 rounded-2xl shadow-lg">
+                  <Camera className="w-8 h-8 text-white" />
+                </div>
+                <div className="flex-1">
+                  <h3 className="text-3xl font-bold text-[#2C2C2C] mb-4" style={{
+                    fontFamily: 'Noto Serif SC, serif'
+                  }}>
+                    关于敦煌
+                  </h3>
+                  <p className="text-[#2C2C2C]/80 leading-relaxed text-lg" style={{
+                    fontFamily: 'Noto Sans SC, sans-serif'
+                  }}>
+                    敦煌，位于甘肃省西北部，是古丝绸之路上的重镇，也是东西方文化交流的枢纽。
+                    这里拥有莫高窟、鸣沙山月牙泉、玉门关、阳关等众多历史文化遗迹，是感受中华文明
+                    和丝路文化的绝佳之地。每一粒沙都承载着历史的记忆，每一处景都诉说着千年的故事。
+                  </p>
+                  
+                  {/* 特色标签 */}
+                  <div className="flex flex-wrap gap-3 mt-6">
+                    {['世界文化遗产', '国家5A级景区', '丝绸之路起点', '佛教艺术圣地'].map((tag, index) => <span key={index} className="px-4 py-2 bg-gradient-to-r from-[#D4A574]/10 to-[#E8A849]/10 text-[#D4A574] rounded-full text-sm font-medium border border-[#D4A574]/20" style={{
+                      fontFamily: 'Noto Sans SC, sans-serif'
+                    }}>
+                        {tag}
+                      </span>)}
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
       </main>
 
-      {/* Footer */}
-      <footer className="bg-[#8B5A2B] text-white py-8 px-6 mt-16">
-        <div className="max-w-6xl mx-auto text-center">
-          <p style={{
+      {/* Footer - 增强视觉冲击 */}
+      <footer className="relative bg-gradient-to-r from-[#8B5A2B] via-[#A0522D] to-[#8B5A2B] text-white py-16 px-6 mt-24 overflow-hidden">
+        {/* 装饰性背景元素 */}
+        <div className="absolute inset-0 opacity-10">
+          <div className="absolute top-0 left-0 w-full h-full bg-[url('https://img.meituan.net/leadinimg/ca07377679d77f6f670af04873c5a742265208.webp%40watermark%3D0')] bg-cover bg-center" />
+        </div>
+        <div className="absolute top-10 right-10 w-40 h-40 border-4 border-white/20 rounded-full" />
+        <div className="absolute bottom-10 left-10 w-32 h-32 border-4 border-white/20 rounded-full" />
+        
+        <div className="relative z-10 max-w-6xl mx-auto text-center">
+          <div className="flex justify-center mb-6">
+            <div className="bg-white/10 backdrop-blur-sm p-3 rounded-full">
+              <Sparkles className="w-8 h-8 text-white" />
+            </div>
+          </div>
+          <h3 className="text-2xl font-bold mb-4" style={{
+            fontFamily: 'Noto Serif SC, serif'
+          }}>
+            敦煌之旅
+          </h3>
+          <p className="text-white/80 mb-6" style={{
+            fontFamily: 'Noto Sans SC, sans-serif'
+          }}>
+            探索千年文化，感受丝路魅力
+          </p>
+          <div className="w-24 h-1 bg-white/30 mx-auto mb-6" />
+          <p className="text-white/60 text-sm" style={{
             fontFamily: 'Noto Sans SC, sans-serif'
           }}>
             © 2026 敦煌之旅 - 探索千年文化

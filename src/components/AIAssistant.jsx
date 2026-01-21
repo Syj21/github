@@ -26,9 +26,9 @@ export function AIAssistant() {
     setInputValue('');
     setIsTyping(true);
     try {
-      // 调用DeepSeek云函数
+      // 调用OpenAI云函数
       const response = await $w.cloud.callFunction({
-        name: 'deepseek-chat',
+        name: 'openai-chat',
         data: {
           message: currentInput,
           history: messages.slice(-10).map(msg => ({
@@ -46,10 +46,18 @@ export function AIAssistant() {
       setMessages(prev => [...prev, botMessage]);
     } catch (error) {
       console.error('AI助手调用失败:', error);
+      let errorMsg = '抱歉，我现在遇到了一些技术问题，无法为您提供智能回复。';
+
+      // 处理云函数返回的错误信息
+      if (error.result && error.result.error) {
+        errorMsg = error.result.error;
+      } else if (error.message) {
+        errorMsg = error.message;
+      }
       const errorMessage = {
         id: messages.length + 2,
         type: 'bot',
-        content: '抱歉，我现在遇到了一些技术问题，无法为您提供智能回复。但我可以告诉您：敦煌是一个充满魅力的地方，有莫高窟的千年艺术、鸣沙山月牙泉的沙漠奇观、雅丹魔鬼城的地质奇观等。请您稍后再试，或者直接浏览我们的景点介绍页面获取信息。',
+        content: errorMsg,
         timestamp: new Date()
       };
       setMessages(prev => [...prev, errorMessage]);

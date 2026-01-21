@@ -12,7 +12,7 @@ import { ImageViewer } from '@/components/ImageViewer';
 import { AIAssistant } from '@/components/AIAssistant';
 export default function Mogao(props) {
   const attraction = {
-    id: 1,
+    id: 'mogao',
     name: '莫高窟',
     images: ['https://img.meituan.net/leadinimg/ca07377679d77f6f670af04873c5a742265208.webp%40watermark%3D0', 'https://pica.zhimg.com/v2-8c9820438459ef3f82ffe9d2d054c21a_r.jpg?source=2c26e567', 'https://img2.baidu.com/it/u=2652790478,1447384087&fm=253&fmt=auto&app=138&f=JPEG?w=800&h=1067', 'https://img0.baidu.com/it/u=1035637835,985422368&fm=253&app=138&f=JPEG?w=800&h=1010', 'https://copyright.bdstatic.com/vcg/creative/e62f2cd1e0c4a90241646c6e519e2ac2.jpg@wm_1,k_cGljX2JqaHdhdGVyLmpwZw=='],
     imageDescriptions: ['莫高窟全景 - 世界文化遗产，规模宏大的佛教艺术圣地', '飞天壁画 - 唐代佛教艺术的巅峰成就，色彩绚丽', '大佛造像 - 高达35米的弥勒佛坐像，展现古代工匠技艺', '彩塑艺术 - 色彩鲜艳、造型生动的佛像雕塑', '洞窟结构 - 依山而建的独特建筑智慧'],

@@ -1,1 +1,17 @@
-[]
+[
+  {
+    "_id": "1",
+    "userName": "administrator",
+    "rating": 5,
+    "content": "这张莫高窟的照片拍得太棒了！完美捕捉了千年石窟的庄严与神秘。壁画上的色彩依然鲜艳，仿佛在诉说着古老的故事。感谢分享，让我再次感受到了敦煌文化的魅力！",
+    "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=administrator",
+    "attractionId": "mogao",
+    "status": "approved",
+    "likes": 0,
+    "replies": 0,
+    "photoId": "",
+    "userId": "administrator",
+    "createdAt": 1737772800000,
+    "updatedAt": 1737772800000
+  }
+]

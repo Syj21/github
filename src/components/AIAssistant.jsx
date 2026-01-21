@@ -1,107 +1,142 @@
 // @ts-ignore;
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 // @ts-ignore;
-import { MessageCircle, X, Send, Bot, User } from 'lucide-react';
+import { MessageCircle, X, Send, Sparkles, MapPin, Calendar, Camera, Utensils } from 'lucide-react';
+// @ts-ignore;
+import { useToast } from '@/components/ui';
 
-export function AIAssistant() {
+export function AIAssistant(props) {
+  const {
+    toast
+  } = useToast();
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState([{
-    id: 1,
-    type: 'bot',
-    content: '您好！我是敦煌旅游AI助手，可以为您介绍敦煌的景点、历史文化、美食等信息。有什么问题请随时问我！',
-    timestamp: new Date()
+    role: 'assistant',
+    content: '您好！我是敦煌旅游AI助手，很高兴为您服务！我可以帮您：\n\n🏛️ 介绍景点信息\n🗺️ 规划旅游路线\n📅 提供开放时间\n🍽️ 推荐美食特产\n📸 分享拍照技巧\n\n请问有什么可以帮您的？'
   }]);
   const [inputValue, setInputValue] = useState('');
   const [isTyping, setIsTyping] = useState(false);
+  const messagesEndRef = useRef(null);
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView({
+      behavior: 'smooth'
+    });
+  };
+  useEffect(() => {
+    scrollToBottom();
+  }, [messages, isOpen]);
+  const getAIResponse = userMessage => {
+    const message = userMessage.toLowerCase();
+
+    // 莫高窟相关问题
+    if (message.includes('莫高窟') || message.includes('千佛洞')) {
+      return `🏛️ **莫高窟**\n\n莫高窟，俗称千佛洞，位于敦煌市东南25公里的鸣沙山东麓断崖上。\n\n📌 **基本信息**\n• 位置：敦煌市东南25公里\n• 评分：4.9/5\n• 建议游览时间：3-4小时\n\n🎨 **特色亮点**\n• 世界现存规模最大的佛教艺术圣地\n• 1987年被列为世界文化遗产\n• 拥有735个洞窟，壁画4.5万平方米\n• 彩塑2415尊\n\n💡 **游览建议**\n• 需要提前预约门票\n• 建议选择上午时段参观，光线更好\n• 洞窟内禁止拍照，请遵守规定\n• 建议租用讲解器或请导游讲解`;
+    }
+
+    // 鸣沙山月牙泉相关问题
+    if (message.includes('鸣沙山') || message.includes('月牙泉')) {
+      return `🏜️ **鸣沙山月牙泉**\n\n鸣沙山月牙泉位于敦煌市城南5公里处，沙泉共处，妙造天成。\n\n📌 **基本信息**\n• 位置：敦煌市城南5公里\n• 评分：4.8/5\n• 建议游览时间：2-3小时\n\n🌟 **特色亮点**\n• 沙不填泉，泉不涸竭的自然奇观\n• 鸣沙山因沙动成响而得名\n• 月牙泉形似新月，水质甘冽\n• 最佳观赏时间：日落时分\n\n💡 **游览建议**\n• 可以体验骑骆驼、滑沙等项目\n• 建议傍晚前往，欣赏日落美景\n• 穿舒适的鞋子，便于爬沙山\n• 带好防晒用品和充足的水`;
+    }
+
+    // 玉门关相关问题
+    if (message.includes('玉门关')) {
+      return `🏰 **玉门关**\n\n玉门关，俗称小方盘城，位于敦煌市西北90公里处的戈壁滩上。\n\n📌 **基本信息**\n• 位置：敦煌市西北90公里\n• 评分：4.7/5\n• 建议游览时间：1-2小时\n\n📜 **历史背景**\n• 始建于汉武帝时期\n• 古代丝绸之路通往西域北道的咽喉要隘\n• 因西域和田美玉经此输入中原而得名\n• 王之涣诗句："羌笛何须怨杨柳，春风不度玉门关"\n\n💡 **游览建议**\n• 建议与阳关、雅丹魔鬼城一起游览\n• 感受大漠孤烟的苍凉之美\n• 了解丝绸之路的历史文化`;
+    }
+
+    // 雅丹魔鬼城相关问题
+    if (message.includes('雅丹') || message.includes('魔鬼城')) {
+      return `🌪️ **雅丹魔鬼城**\n\n雅丹魔鬼城，又称雅丹国家地质公园，位于敦煌市西北180公里的罗布泊边缘。\n\n📌 **基本信息**\n• 位置：敦煌市西北180公里\n• 评分：4.6/5\n• 建议游览时间：2-3小时\n\n🎭 **特色亮点**\n• 各种形状奇特的风蚀地貌\n• 大风刮过时发出怪异声音\n• 摄影爱好者和探险者的天堂\n• 日落时分景色最为壮观\n\n💡 **游览建议**\n• 最佳游览时间：傍晚日落时分\n• 带好相机，拍摄独特地貌\n• 注意防晒和补水\n• 建议参加一日游团，交通更方便`;
+    }
+
+    // 敦煌博物馆相关问题
+    if (message.includes('博物馆')) {
+      return `🏛️ **敦煌博物馆**\n\n敦煌博物馆位于敦煌市中心，是展示敦煌历史文化和丝绸之路文明的重要博物馆。\n\n📌 **基本信息**\n• 位置：敦煌市中心阳关东路\n• 评分：4.8/5\n• 建议游览时间：2-3小时\n\n🎨 **馆藏特色**\n• 大量珍贵文物：汉简、文书、壁画、雕塑\n• 全面展示敦煌历史变迁和文化发展\n• 现代化展示手段\n• 了解丝绸之路重镇的辉煌历史\n\n💡 **游览建议**\n• 免费开放，需携带身份证\n• 建议预留充足时间仔细参观\n• 可以了解敦煌的历史背景后再去莫高窟`;
+    }
+
+    // 阳关相关问题
+    if (message.includes('阳关')) {
+      return `🏔️ **阳关遗址**\n\n阳关位于敦煌市西南70公里处的古董滩上，是中国古代陆路对外交通咽喉之地。\n\n📌 **基本信息**\n• 位置：敦煌市西南70公里\n• 评分：4.7/5\n• 建议游览时间：1-2小时\n\n📜 **历史背景**\n• 始建于汉武帝时期\n• 丝绸之路南路必经的关隘\n• 王维诗句："劝君更尽一杯酒，西出阳关无故人"\n\n💡 **游览建议**\n• 感受丝绸之路的历史沧桑\n• 可以登高望远，欣赏大漠风光\n• 建议与玉门关一起游览`;
+    }
+
+    // 沙洲夜市相关问题
+    if (message.includes('夜市') || message.includes('沙洲')) {
+      return `🌙 **沙洲夜市**\n\n沙洲夜市位于敦煌市中心，是敦煌最热闹的夜市之一。\n\n📌 **基本信息**\n• 位置：敦煌市中心\n• 评分：4.6/5\n• 开放时间：晚上6:00-凌晨\n\n🍽️ **特色美食**\n• 驴肉黄面\n• 烤羊肉串\n• 杏皮水\n• 驴肉黄面\n• 各种西北特色小吃\n\n🛍️ **购物推荐**\n• 敦煌壁画复制品\n• 丝织品\n• 手工艺品\n• 纪念品\n\n💡 **游览建议**\n• 晚上前往，体验热闹氛围\n• 品尝当地特色美食\n• 购买纪念品和手工艺品`;
+    }
+
+    // 丝路遗产城相关问题
+    if (message.includes('丝路') || message.includes('遗产城')) {
+      return `🏺 **丝路遗产城**\n\n丝路遗产城位于敦煌市郊，是一座以丝绸之路文化为主题的大型文化旅游景区。\n\n📌 **基本信息**\n• 位置：敦煌市郊\n• 评分：4.5/5\n• 建议游览时间：3-4小时\n\n🎭 **特色亮点**\n• 复原古代丝绸之路重要城市和建筑\n• 长安城、敦煌古城、波斯集市等\n• 仿佛穿越回千年前的丝绸之路\n• 丰富的文化表演和互动体验项目\n\n🎪 **体验项目**\n• 丝绸之路主题演出\n• 传统手工艺制作\n• 古代服饰体验\n\n💡 **游览建议**\n• 适合全家游览，寓教于乐\n• 可以体验古代丝绸之路文化\n• 建议预留充足时间体验各种项目`;
+    }
+
+    // 雷音寺相关问题
+    if (message.includes('雷音寺')) {
+      return `🏯 **雷音寺**\n\n雷音寺位于敦煌市东南，是一座历史悠久的佛教寺院。\n\n📌 **基本信息**\n• 位置：敦煌市东南\n• 评分：4.6/5\n• 建议游览时间：1-2小时\n\n🏛️ **建筑特色**\n• 始建于唐代，历经多次修缮\n• 大雄宝殿、观音殿、藏经楼等主要建筑\n• 建筑宏伟壮观，供奉各种佛像\n• 环境清幽，古树参天\n\n🙏 **文化体验**\n• 参拜祈福、静心修行\n• 定期举办法会活动\n• 感受佛教文化氛围\n\n💡 **游览建议**\n• 适合静心参拜，感受佛教文化\n• 可以了解佛教艺术和建筑\n• 保持安静，尊重宗教场所`;
+    }
+
+    // 路线规划问题
+    if (message.includes('路线') || message.includes('行程') || message.includes('规划')) {
+      return `🗺️ **敦煌旅游路线推荐**\n\n📅 **一日游路线**\n上午：莫高窟（3-4小时）\n下午：鸣沙山月牙泉（2-3小时）\n晚上：沙洲夜市\n\n📅 **两日游路线**\n第一天：莫高窟 + 鸣沙山月牙泉 + 沙洲夜市\n第二天：玉门关 + 雅丹魔鬼城（一日游）\n\n📅 **三日游路线**\n第一天：莫高窟 + 鸣沙山月牙泉\n第二天：玉门关 + 雅丹魔鬼城 + 阳关\n第三天：敦煌博物馆 + 丝路遗产城 + 沙洲夜市\n\n💡 **贴心提示**\n• 莫高窟需要提前预约\n• 建议包车或参加一日游团前往远距离景点\n• 注意防晒和补水\n• 最佳旅游季节：4-10月`;
+    }
+
+    // 美食推荐问题
+    if (message.includes('美食') || message.includes('吃') || message.includes('特产')) {
+      return `🍽️ **敦煌美食推荐**\n\n🥘 **必尝美食**\n• **驴肉黄面** - 敦煌特色面食，驴肉鲜嫩，面条劲道\n• **烤羊肉串** - 西北特色，肉质鲜美，香气扑鼻\n• **杏皮水** - 当地特色饮品，酸甜解渴\n• **胡羊焖饼** - 传统西北菜，羊肉软烂，饼香浓郁\n• **泡儿油糕** - 当地特色小吃，外酥内软\n\n🛍️ **特产推荐**\n• **李广杏** - 敦煌特产水果，甜美多汁\n• **鸣山大枣** - 当地特产红枣，营养丰富\n• **敦煌地毯** - 传统手工艺品，精美实用\n• **夜光杯** - 著名的酒器，工艺精湛\n\n📍 **美食地点**\n• 沙洲夜市 - 品尝各种小吃和特产\n• 市区各大餐厅 - 品尝正餐\n• 当地农家乐 - 体验地道西北菜`;
+    }
+
+    // 开放时间问题
+    if (message.includes('时间') || message.includes('开放') || message.includes('门票')) {
+      return `🕐 **景点开放时间及门票信息**\n\n🏛️ **莫高窟**\n• 开放时间：8:30-18:00（4月-10月）\n• 门票：238元（含数字展示中心+莫高窟+区间车）\n• 需提前预约\n\n🏜️ **鸣沙山月牙泉**\n• 开放时间：6:00-19:30（夏季）\n• 门票：110元（三日有效）\n\n🏰 **玉门关**\n• 开放时间：8:00-18:00\n• 门票：40元\n\n🌪️ **雅丹魔鬼城**\n• 开放时间：8:00-21:00\n• 门票：120元（含区间车）\n\n🏛️ **敦煌博物馆**\n• 开放时间：9:00-17:00（周一闭馆）\n• 门票：免费\n\n🏔️ **阳关**\n• 开放时间：8:00-18:00\n• 门票：60元\n\n🌙 **沙洲夜市**\n• 开放时间：18:00-凌晨\n• 门票：免费\n\n🏺 **丝路遗产城**\n• 开放时间：9:00-18:00\n• 门票：120元\n\n🏯 **雷音寺**\n• 开放时间：8:00-18:00\n• 门票：免费\n\n💡 **温馨提示**\n• 莫高窟门票需提前在官网预约\n• 部分景点门票有淡旺季价格差异\n• 建议购买联票或套票更划算`;
+    }
+
+    // 拍照技巧问题
+    if (message.includes('拍照') || message.includes('摄影') || message.includes('照片')) {
+      return `📸 **敦煌拍照技巧推荐**\n\n🏜️ **鸣沙山月牙泉**\n• 最佳时间：日出和日落时分\n• 拍摄角度：从沙丘顶部俯拍月牙泉全景\n• 技巧：利用剪影效果拍摄骆驼和人物\n\n🏛️ **莫高窟**\n• 注意：洞窟内禁止拍照\n• 可以拍摄：九层楼外观、周边风景\n• 建议：购买官方画册和明信片\n\n🌪️ **雅丹魔鬼城**\n• 最佳时间：傍晚日落时分\n• 拍摄重点：奇特的地貌造型\n• 技巧：利用侧光突出地貌纹理\n\n🏰 **玉门关 & 阳关**\n• 拍摄主题：历史沧桑感\n• 技巧：利用大漠孤烟的意境\n• 建议：拍摄人物与古迹的对比\n\n🌙 **沙洲夜市**\n• 拍摄重点：热闹的夜市氛围\n• 技巧：利用灯光和烟火气\n• 建议：拍摄美食和手工艺品特写\n\n💡 **通用技巧**\n• 带好三脚架，拍摄夜景\n• 注意保护相机，防止沙尘\n• 利用黄金时段拍摄\n• 多尝试不同角度和构图`;
+    }
+
+    // 交通问题
+    if (message.includes('交通') || message.includes('怎么去') || message.includes('到达')) {
+      return `🚗 **敦煌交通指南**\n\n✈️ **到达敦煌**\n• 敦煌机场：有航班连接北京、上海、西安等城市\n• 火车：敦煌火车站，有兰新铁路经过\n• 长途汽车：从兰州、西宁等地有班车\n\n🚕 **市内交通**\n• 出租车：市区内景点打车方便\n• 公交车：有公交线路连接主要景点\n• 租车：可以租车自驾游\n\n🚌 **景点间交通**\n• 莫高窟、鸣沙山：市区打车约20-30元\n• 玉门关、雅丹：建议包车或参加一日游团\n• 阳关：建议包车前往\n\n💡 **交通建议**\n• 远距离景点建议包车或参加一日游团\n• 可以在市区拼车前往远距离景点\n• 注意沙漠地区行车安全\n• 提前规划好路线和时间`;
+    }
+
+    // 住宿问题
+    if (message.includes('住宿') || message.includes('酒店') || message.includes('住')) {
+      return `🏨 **敦煌住宿推荐**\n\n📍 **市区住宿**\n• 优点：交通便利，靠近沙洲夜市\n• 推荐：敦煌宾馆、阳光沙州大酒店\n• 价格：200-500元/晚\n\n🏜️ **鸣沙山附近**\n• 优点：靠近景点，方便看日出日落\n• 推荐：鸣沙山月牙泉度假村\n• 价格：300-800元/晚\n\n🏛️ **莫高窟附近**\n• 优点：方便参观莫高窟\n• 推荐：莫高窟附近的民宿\n• 价格：200-400元/晚\n\n💡 **住宿建议**\n• 旺季（4-10月）建议提前预订\n• 可以选择特色民宿体验当地文化\n• 注意查看酒店评价和设施\n• 市区住宿性价比最高`;
+    }
+
+    // 问候语
+    if (message.includes('你好') || message.includes('您好') || message.includes('hi') || message.includes('hello')) {
+      return `您好！很高兴为您服务！😊\n\n我是敦煌旅游AI助手，可以为您提供以下帮助：\n\n🏛️ 景点介绍和推荐\n🗺️ 旅游路线规划\n📅 开放时间和门票信息\n🍽️ 美食和特产推荐\n📸 拍照技巧和摄影建议\n🚗 交通和住宿指南\n\n请问您想了解哪方面的信息呢？`;
+    }
+
+    // 默认回复
+    return `感谢您的提问！😊\n\n我可以帮您解答关于敦煌旅游的各种问题，例如：\n\n🏛️ 景点信息：莫高窟、鸣沙山、玉门关等\n🗺️ 路线规划：一日游、两日游、三日游路线\n📅 实用信息：开放时间、门票价格\n🍽️ 美食推荐：当地特色美食和特产\n📸 拍照技巧：各景点的最佳拍摄点和时间\n🚗 交通住宿：如何到达和住宿推荐\n\n请告诉我您想了解的具体内容，我会尽力为您解答！`;
+  };
   const handleSendMessage = async () => {
-    if (!inputValue.trim()) return;
-    const userMessage = {
-      id: messages.length + 1,
-      type: 'user',
-      content: inputValue,
-      timestamp: new Date()
-    };
-    setMessages(prev => [...prev, userMessage]);
-    const currentInput = inputValue;
+    if (!inputValue.trim()) {
+      toast({
+        title: '提示',
+        description: '请输入您的问题',
+        variant: 'default'
+      });
+      return;
+    }
+    const userMessage = inputValue.trim();
+    setMessages(prev => [...prev, {
+      role: 'user',
+      content: userMessage
+    }]);
     setInputValue('');
     setIsTyping(true);
-    try {
-      // 调用DeepSeek云函数，设置超时时间为25秒
-      const response = await $w.cloud.callFunction({
-        name: 'deepseek-chat',
-        data: {
-          message: currentInput,
-          history: messages.slice(-10).map(msg => ({
-            role: msg.type === 'user' ? 'user' : 'assistant',
-            content: msg.content
-          }))
-        },
-        timeout: 25000 // 25秒超时
-      });
 
-      // 如果DeepSeek失败，尝试豆包API作为备用
-      if (!response.result || !response.result.success) {
-        const doubaoResponse = await $w.cloud.callFunction({
-          name: 'doubao-chat',
-          data: {
-            message: currentInput,
-            history: messages.slice(-10).map(msg => ({
-              role: msg.type === 'user' ? 'user' : 'assistant',
-              content: msg.content
-            }))
-          },
-          timeout: 25000
-        });
-        if (doubaoResponse.result && doubaoResponse.result.success) {
-          const botMessage = {
-            id: messages.length + 2,
-            type: 'bot',
-            content: doubaoResponse.result.reply,
-            timestamp: new Date()
-          };
-          setMessages(prev => [...prev, botMessage]);
-          return;
-        }
-      }
-      // 检查响应结构
-      if (response.result && response.result.success) {
-        const botMessage = {
-          id: messages.length + 2,
-          type: 'bot',
-          content: response.result.reply,
-          timestamp: new Date()
-        };
-        setMessages(prev => [...prev, botMessage]);
-      } else {
-        // 处理API返回的错误
-        const errorMsg = response.result?.error || 'AI助手响应异常';
-        throw new Error(errorMsg);
-      }
-    } catch (error) {
-      console.error('AI助手调用失败:', error);
-      let errorMsg = '抱歉，我现在遇到了一些技术问题，无法为您提供智能回复。';
-
-      // 处理云函数返回的错误信息
-      if (error.result && error.result.error) {
-        errorMsg = error.result.error;
-      } else if (error.message) {
-        errorMsg = error.message;
-      }
-
-      // 提供具体的配置指导
-      if (errorMsg.includes('API密钥未配置')) {
-        errorMsg = 'AI助手需要配置API密钥才能工作。请管理员在云开发控制台的环境变量中设置以下密钥：\n- DEEPSEEK_API_KEY\n- DOUBAO_API_KEY\n- OPENAI_API_KEY';
-      }
-      const errorMessage = {
-        id: messages.length + 2,
-        type: 'bot',
-        content: errorMsg,
-        timestamp: new Date()
-      };
-      setMessages(prev => [...prev, errorMessage]);
-    } finally {
+    // 模拟AI思考延迟
+    setTimeout(() => {
+      const aiResponse = getAIResponse(userMessage);
+      setMessages(prev => [...prev, {
+        role: 'assistant',
+        content: aiResponse
+      }]);
       setIsTyping(false);
-    }
+    }, 1000 + Math.random() * 1000);
   };
   const handleKeyPress = e => {
     if (e.key === 'Enter' && !e.shiftKey) {
@@ -109,83 +144,110 @@ export function AIAssistant() {
       handleSendMessage();
     }
   };
-  return <>
-      {/* 聊天按钮 */}
-      <button onClick={() => setIsOpen(true)} className="fixed top-6 right-6 z-50 bg-gradient-to-r from-[#D4A574] to-[#E8A849] text-white p-4 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105" style={{
-      fontFamily: 'Noto Sans SC, sans-serif'
+  return <div className="fixed top-4 right-4 z-50">
+      {/* 悬浮按钮 */}
+      {!isOpen && <button onClick={() => setIsOpen(true)} className="w-14 h-14 bg-gradient-to-br from-[#D4A574] to-[#E8A849] rounded-full shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-110 flex items-center justify-center group" style={{
+      boxShadow: '0 4px 20px rgba(212, 165, 116, 0.4)'
     }}>
-        <MessageCircle className="w-6 h-6" />
-      </button>
+          <MessageCircle className="w-7 h-7 text-white group-hover:rotate-12 transition-transform duration-300" />
+          <span className="absolute -top-1 -right-1 w-4 h-4 bg-red-500 rounded-full animate-pulse" />
+        </button>}
 
       {/* 聊天窗口 */}
-      {isOpen && <div className="fixed top-0 right-0 h-full w-96 bg-white shadow-2xl z-50 flex flex-col border-l border-gray-200">
+      {isOpen && <div className="w-96 h-[600px] bg-white rounded-2xl shadow-2xl flex flex-col overflow-hidden" style={{
+      boxShadow: '0 20px 60px rgba(0, 0, 0, 0.15)'
+    }}>
           {/* 头部 */}
-          <div className="bg-gradient-to-r from-[#D4A574] to-[#E8A849] text-white p-4 flex items-center justify-between">
+          <div className="bg-gradient-to-r from-[#D4A574] to-[#E8A849] p-4 flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <Bot className="w-6 h-6" />
-              <h3 className="font-bold text-lg" style={{
-            fontFamily: 'Noto Serif SC, serif'
-          }}>
-                敦煌AI助手
-              </h3>
+              <div className="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center">
+                <Sparkles className="w-5 h-5 text-white" />
+              </div>
+              <div>
+                <h3 className="text-white font-bold text-lg">敦煌AI助手</h3>
+                <p className="text-white/80 text-xs flex items-center gap-1">
+                  <span className="w-2 h-2 bg-green-400 rounded-full animate-pulse" />
+                  在线
+                </p>
+              </div>
             </div>
-            <button onClick={() => setIsOpen(false)} className="text-white hover:text-white/80 transition-colors">
-              <X className="w-5 h-5" />
+            <button onClick={() => setIsOpen(false)} className="w-8 h-8 bg-white/20 rounded-full flex items-center justify-center hover:bg-white/30 transition-colors">
+              <X className="w-5 h-5 text-white" />
             </button>
           </div>
 
-          {/* 消息列表 */}
-          <div className="flex-1 overflow-y-auto p-4 space-y-4">
-            {messages.map(message => <div key={message.id} className={`flex gap-3 ${message.type === 'user' ? 'justify-end' : 'justify-start'}`}>
-                {message.type === 'bot' && <div className="bg-[#D4A574]/10 p-2 rounded-full flex-shrink-0">
-                    <Bot className="w-4 h-4 text-[#D4A574]" />
-                  </div>}
-                <div className={`max-w-[80%] p-3 rounded-2xl ${message.type === 'user' ? 'bg-[#D4A574] text-white' : 'bg-gray-100 text-gray-800'}`} style={{
-            fontFamily: 'Noto Sans SC, sans-serif'
-          }}>
-                  <p className="text-sm leading-relaxed">{message.content}</p>
-                  <p className="text-xs opacity-70 mt-1">
-                    {message.timestamp.toLocaleTimeString('zh-CN', {
-                hour: '2-digit',
-                minute: '2-digit'
-              })}
-                  </p>
-                </div>
-                {message.type === 'user' && <div className="bg-[#D4A574] p-2 rounded-full flex-shrink-0">
-                    <User className="w-4 h-4 text-white" />
-                  </div>}
-              </div>)}
-            
-            {/* 打字指示器 */}
-            {isTyping && <div className="flex gap-3 justify-start">
-                <div className="bg-[#D4A574]/10 p-2 rounded-full flex-shrink-0">
-                  <Bot className="w-4 h-4 text-[#D4A574]" />
-                </div>
-                <div className="bg-gray-100 p-3 rounded-2xl">
-                  <div className="flex gap-1">
-                    <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"></div>
-                    <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{
-                animationDelay: '0.1s'
-              }}></div>
-                    <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{
-                animationDelay: '0.2s'
-              }}></div>
+          {/* 消息区域 */}
+          <div className="flex-1 overflow-y-auto p-4 space-y-4 bg-gradient-to-b from-gray-50 to-white">
+            {messages.map((message, index) => <div key={index} className={`flex ${message.role === 'user' ? 'justify-end' : 'justify-start'}`}>
+                <div className={`max-w-[85%] rounded-2xl p-3 ${message.role === 'user' ? 'bg-gradient-to-br from-[#D4A574] to-[#E8A849] text-white' : 'bg-white shadow-md border border-gray-100'}`}>
+                  {message.role === 'assistant' && <div className="flex items-center gap-2 mb-2">
+                      <Sparkles className="w-4 h-4 text-[#D4A574]" />
+                      <span className="text-xs font-medium text-gray-500">AI助手</span>
+                    </div>}
+                  <div className={`text-sm leading-relaxed whitespace-pre-wrap ${message.role === 'user' ? 'text-white' : 'text-gray-700'}`}>
+                    {message.content}
                   </div>
                 </div>
+              </div>)}
+            
+            {isTyping && <div className="flex justify-start">
+                <div className="bg-white shadow-md border border-gray-100 rounded-2xl p-3 flex items-center gap-2">
+                  <div className="flex gap-1">
+                    <span className="w-2 h-2 bg-[#D4A574] rounded-full animate-bounce" style={{
+                animationDelay: '0ms'
+              }} />
+                    <span className="w-2 h-2 bg-[#D4A574] rounded-full animate-bounce" style={{
+                animationDelay: '150ms'
+              }} />
+                    <span className="w-2 h-2 bg-[#D4A574] rounded-full animate-bounce" style={{
+                animationDelay: '300ms'
+              }} />
+                  </div>
+                  <span className="text-xs text-gray-500">AI正在思考...</span>
+                </div>
               </div>}
+            <div ref={messagesEndRef} />
           </div>
 
-          {/* 输入框 */}
-          <div className="p-4 border-t border-gray-200">
+          {/* 输入区域 */}
+          <div className="p-4 bg-white border-t border-gray-100">
             <div className="flex gap-2">
-              <input type="text" value={inputValue} onChange={e => setInputValue(e.target.value)} onKeyPress={handleKeyPress} placeholder="请输入您的问题..." className="flex-1 px-4 py-2 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-[#D4A574] focus:border-transparent" style={{
-            fontFamily: 'Noto Sans SC, sans-serif'
-          }} disabled={isTyping} />
-              <button onClick={handleSendMessage} disabled={!inputValue.trim() || isTyping} className="bg-[#D4A574] text-white p-2 rounded-full hover:bg-[#B8956A] transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
-                <Send className="w-5 h-5" />
+              <input type="text" value={inputValue} onChange={e => setInputValue(e.target.value)} onKeyPress={handleKeyPress} placeholder="输入您的问题..." className="flex-1 px-4 py-3 bg-gray-50 rounded-xl border border-gray-200 focus:border-[#D4A574] focus:ring-2 focus:ring-[#D4A574]/20 outline-none transition-all text-sm" />
+              <button onClick={handleSendMessage} disabled={isTyping} className="w-12 h-12 bg-gradient-to-br from-[#D4A574] to-[#E8A849] rounded-xl flex items-center justify-center hover:shadow-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed" style={{
+            boxShadow: '0 4px 15px rgba(212, 165, 116, 0.3)'
+          }}>
+                <Send className="w-5 h-5 text-white" />
+              </button>
+            </div>
+            
+            {/* 快捷问题 */}
+            <div className="flex gap-2 mt-3 overflow-x-auto pb-1">
+              <button onClick={() => {
+            setInputValue('莫高窟的开放时间和门票价格是多少？');
+            setTimeout(handleSendMessage, 100);
+          }} className="flex-shrink-0 px-3 py-1.5 bg-gray-100 hover:bg-gray-200 rounded-full text-xs text-gray-600 transition-colors">
+                莫高窟门票
+              </button>
+              <button onClick={() => {
+            setInputValue('推荐一条敦煌一日游路线');
+            setTimeout(handleSendMessage, 100);
+          }} className="flex-shrink-0 px-3 py-1.5 bg-gray-100 hover:bg-gray-200 rounded-full text-xs text-gray-600 transition-colors">
+                一日游路线
+              </button>
+              <button onClick={() => {
+            setInputValue('敦煌有什么特色美食？');
+            setTimeout(handleSendMessage, 100);
+          }} className="flex-shrink-0 px-3 py-1.5 bg-gray-100 hover:bg-gray-200 rounded-full text-xs text-gray-600 transition-colors">
+                特色美食
+              </button>
+              <button onClick={() => {
+            setInputValue('鸣沙山月牙泉怎么拍照好看？');
+            setTimeout(handleSendMessage, 100);
+          }} className="flex-shrink-0 px-3 py-1.5 bg-gray-100 hover:bg-gray-200 rounded-full text-xs text-gray-600 transition-colors">
+                拍照技巧
               </button>
             </div>
           </div>
         </div>}
-    </>;
+    </div>;
 }

@@ -33,6 +33,9 @@ export default function Mingsha(props) {
     setShowImageViewer(true);
   };
   return <>
+      {/* AI助手 */}
+      <AIAssistant />
+
       {/* Header */}
       <header className="bg-gradient-to-r from-[#D4A574] to-[#E8A849] py-6 px-6 shadow-lg">
         <div className="max-w-6xl mx-auto">
@@ -99,8 +102,5 @@ export default function Mingsha(props) {
           </div>
         </div>
       </main>
-      
-      {/* AI助手 */}
-      <AIAssistant />
     </>;
 }

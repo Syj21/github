@@ -9,6 +9,7 @@ import { PhotoShare } from '@/components/PhotoShare';
 import { RouteGuide } from '@/components/RouteGuide';
 import { CommentSection } from '@/components/CommentSection';
 import { ImageViewer } from '@/components/ImageViewer';
+import { AIAssistant } from '@/components/AIAssistant';
 export default function Mogao(props) {
   const attraction = {
     id: 1,
@@ -32,6 +33,9 @@ export default function Mogao(props) {
     setShowImageViewer(true);
   };
   return <>
+      {/* AI助手 */}
+      <AIAssistant />
+
       {/* Header */}
       <header className="bg-gradient-to-r from-[#D4A574] to-[#E8A849] py-6 px-6 shadow-lg">
         <div className="max-w-6xl mx-auto">

@@ -9,6 +9,3 @@ export * from './ScrollOpeningAnimation.jsx';
 export * from './ImageViewer.jsx';
 export * from './VRExperience.jsx';
 export * from './AIAssistant.jsx';
-export * from './WeatherWidget.jsx';
-export * from './RoutePlanner.jsx';
-export * from './EnhancedVRExperience.jsx';

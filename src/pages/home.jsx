@@ -92,6 +92,9 @@ export default function Home(props) {
     }
   };
   return <>
+      {/* AI助手 */}
+      <AIAssistant />
+
       {/* 主内容区域 */}
       <div className="min-h-screen bg-[#FDF8F3]">
       {/* Header */}
@@ -164,9 +167,6 @@ export default function Home(props) {
           </p>
         </div>
       </footer>
-      
-      {/* AI助手 */}
-      <AIAssistant />
     </div>
     </>;
 }

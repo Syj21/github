@@ -9,6 +9,7 @@ import { PhotoShare } from '@/components/PhotoShare';
 import { RouteGuide } from '@/components/RouteGuide';
 import { CommentSection } from '@/components/CommentSection';
 import { AIAssistant } from '@/components/AIAssistant';
+import { CulturalHeritageSection } from '@/components/CulturalHeritageSection';
 export default function ShazhouMarket(props) {
   const attraction = {
     id: 'shazhou_market',
@@ -71,6 +72,14 @@ export default function ShazhouMarket(props) {
 
         {/* 评论区域 */}
         <CommentSection attractionId={attraction.id} $w={props.$w} />
+
+        {/* 文化瑰宝区域 */}
+        <CulturalHeritageSection content={{
+        title: '市井烟火 · 人间百味',
+        paragraphs: ['「市」字，从巾，从咫。巾者，布帛也；咫者，近也。市集，是人们交换物品、交流信息、分享生活的场所，是城市活力的源泉。', '沙洲夜市，作为敦煌最热闹的夜市之一，汇集了各种特色小吃、手工艺品、纪念品等。这里不仅有驴肉黄面、烤羊肉串、杏皮水等敦煌特色美食，还有精美的敦煌壁画复制品、丝织品等纪念品。夜市灯火通明，热闹非凡，是体验敦煌当地文化和美食的绝佳去处。', '夜市，是城市生活的缩影，也是人间烟火的集中体现。在这里，我们可以品尝到地道的美食，购买到精美的手工艺品，感受到浓郁的西北风情。更重要的是，我们可以在这里与当地人交流，了解他们的生活方式和文化传统，真正体验到敦煌的魅力和中国的美。'],
+        poetry: '「人间烟火气，最抚凡人心。」—— 民间谚语',
+        poetryAuthor: '民间智慧'
+      }} />
 
         {/* Info Section */}
         <div className="mt-16 bg-white rounded-2xl p-8 shadow-lg border-l-4 border-[#D4A574]">

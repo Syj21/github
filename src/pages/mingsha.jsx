@@ -10,6 +10,7 @@ import { RouteGuide } from '@/components/RouteGuide';
 import { CommentSection } from '@/components/CommentSection';
 import { ImageViewer } from '@/components/ImageViewer';
 import { AIAssistant } from '@/components/AIAssistant';
+import { CulturalHeritageSection } from '@/components/CulturalHeritageSection';
 export default function Mingsha(props) {
   const attraction = {
     id: 2,
@@ -79,6 +80,14 @@ export default function Mingsha(props) {
 
         {/* 评论区域 */}
         <CommentSection attractionId={attraction.id} $w={props.$w} />
+
+        {/* 文化瑰宝区域 */}
+        <CulturalHeritageSection content={{
+        title: '沙泉共生 · 天地奇观',
+        paragraphs: ['「沙」字，从水，少声。水少则沙现，沙聚则水隐。鸣沙山与月牙泉，沙泉共处，妙造天成，自古以「沙漠奇观」著称于世。', '鸣沙山，因沙动成响而得名。每当风起，沙粒相互摩擦，发出如雷鸣般的声响，故称「鸣沙」。月牙泉，处于鸣沙山环抱之中，其形酷似一弯新月，水质甘冽，澄清如镜。绵历古今，沙不填泉，泉不涸竭，成为大自然的一大奇迹。', '古人云：「大漠孤烟直，长河落日圆。」鸣沙山月牙泉，正是这首千古名句的生动写照。金黄的沙丘环抱碧绿的泉水，夕阳西下，驼铃声声，仿佛穿越千年，回到了丝绸之路的繁华岁月。这里不仅有自然的鬼斧神工，更承载着中华儿女对美好生活的向往与追求。'],
+        poetry: '「大漠孤烟直，长河落日圆。」—— 王维《使至塞上》',
+        poetryAuthor: '唐代诗人'
+      }} />
 
         {/* Info Section */}
         <div className="mt-16 bg-white rounded-2xl p-8 shadow-lg border-l-4 border-[#D4A574]">

@@ -9,3 +9,4 @@ export * from './ScrollOpeningAnimation.jsx';
 export * from './ImageViewer.jsx';
 export * from './VRExperience.jsx';
 export * from './AIAssistant.jsx';
+export * from './CulturalHeritageSection.jsx';

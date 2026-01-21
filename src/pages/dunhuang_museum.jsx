@@ -9,6 +9,7 @@ import { PhotoShare } from '@/components/PhotoShare';
 import { RouteGuide } from '@/components/RouteGuide';
 import { CommentSection } from '@/components/CommentSection';
 import { AIAssistant } from '@/components/AIAssistant';
+import { CulturalHeritageSection } from '@/components/CulturalHeritageSection';
 export default function DunhuangMuseum(props) {
   const attraction = {
     id: 'dunhuang_museum',
@@ -71,6 +72,14 @@ export default function DunhuangMuseum(props) {
 
         {/* 评论区域 */}
         <CommentSection attractionId={attraction.id} $w={props.$w} />
+
+        {/* 文化瑰宝区域 */}
+        <CulturalHeritageSection content={{
+        title: '博览古今 · 文脉传承',
+        paragraphs: ['「博」字，从十，尃声。十者，数之全也；尃者，布也。博物馆，是收藏、展示、研究人类文化遗产的场所，是连接过去与未来的桥梁。', '敦煌博物馆，作为展示敦煌历史文化和丝绸之路文明的重要窗口，馆内收藏了大量珍贵文物，包括汉简、文书、壁画、雕塑等。这些文物，每一件都承载着历史的记忆，诉说着敦煌从古至今的变迁。', '博物馆不仅是文物的守护者，更是文化的传播者。通过现代化的展示手段，让游客深入了解敦煌作为丝绸之路重镇的辉煌历史和多元文化交融的独特魅力。在这里，我们可以触摸历史的脉搏，感受文明的温度，领略中华文化的博大精深。'],
+        poetry: '「江山留胜迹，我辈复登临。」—— 孟浩然《与诸子登岘山》',
+        poetryAuthor: '唐代诗人'
+      }} />
 
         {/* Info Section */}
         <div className="mt-16 bg-white rounded-2xl p-8 shadow-lg border-l-4 border-[#D4A574]">

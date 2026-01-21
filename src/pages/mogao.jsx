@@ -10,6 +10,7 @@ import { RouteGuide } from '@/components/RouteGuide';
 import { CommentSection } from '@/components/CommentSection';
 import { ImageViewer } from '@/components/ImageViewer';
 import { AIAssistant } from '@/components/AIAssistant';
+import { CulturalHeritageSection } from '@/components/CulturalHeritageSection';
 export default function Mogao(props) {
   const attraction = {
     id: 'mogao',
@@ -85,7 +86,13 @@ export default function Mogao(props) {
         {/* 评论区域 */}
         <CommentSection attractionId={attraction.id} $w={props.$w} />
 
-
+        {/* 文化瑰宝区域 */}
+        <CulturalHeritageSection content={{
+        title: '窟藏千年 · 佛光普照',
+        paragraphs: ['「窟」字，从穴，屈声。穴者，土室也；屈者，短也。古人依山开凿，于崖壁间营造洞窟，以避风雨，以安神灵。莫高窟之「窟」，不仅是物理空间的营造，更是精神世界的寄托。', '莫高窟始建于前秦建元二年（公元366年），历经十六国、北朝、隋、唐、五代、西夏、元等十余个朝代，历时千年，形成了规模宏大的佛教艺术宝库。现存洞窟735个，壁画4.5万平方米，彩塑2415尊，是世界上现存规模最大、内容最丰富的佛教艺术圣地。', '窟内壁画，色彩绚丽，线条流畅，既有佛教故事的庄严描绘，也有世俗生活的生动记录。飞天壁画，衣袂飘飘，仿佛破壁而出；菩萨造像，慈眉善目，尽显慈悲情怀。每一笔每一划，都凝聚着古代工匠的智慧与虔诚，诉说着中华文明的博大精深。'],
+        poetry: '「劝君更尽一杯酒，西出阳关无故人。」—— 王维《送元二使安西》',
+        poetryAuthor: '唐代诗人'
+      }} />
 
         {/* 游览提示 */}
         <div className="mt-8 bg-white rounded-2xl p-8 shadow-lg border-l-4 border-[#D4A574]">

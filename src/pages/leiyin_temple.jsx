@@ -9,6 +9,7 @@ import { PhotoShare } from '@/components/PhotoShare';
 import { RouteGuide } from '@/components/RouteGuide';
 import { CommentSection } from '@/components/CommentSection';
 import { AIAssistant } from '@/components/AIAssistant';
+import { CulturalHeritageSection } from '@/components/CulturalHeritageSection';
 export default function LeiyinTemple(props) {
   const attraction = {
     id: 'leiyin_temple',
@@ -71,6 +72,14 @@ export default function LeiyinTemple(props) {
 
         {/* 评论区域 */}
         <CommentSection attractionId={attraction.id} $w={props.$w} />
+
+        {/* 文化瑰宝区域 */}
+        <CulturalHeritageSection content={{
+        title: '雷音梵韵 · 佛光普照',
+        paragraphs: ['「雷」字，从雨，畾声。雨者，水也；畾者，田也。雷音，佛之音声也，如雷震耳，警醒众生。雷音寺，因佛音如雷而得名，是敦煌重要的佛教文化场所。', '雷音寺始建于唐代，历经多次修缮，现已成为敦煌重要的佛教文化场所。寺内建筑宏伟壮观，有大雄宝殿、观音殿、藏经楼等主要建筑，供奉着各种佛像。寺院环境清幽，古树参天，是参拜祈福、静心修行的理想之地。', '佛教文化是中华文明的重要组成部分，雷音寺作为佛教文化的载体，不仅承载着宗教信仰，更承载着中华文化的精神内核。在这里，我们可以感受到佛教的慈悲与智慧，体验到内心的宁静与平和。雷音寺还定期举办法会活动，吸引众多信众前来朝拜，传承着千年的佛教文化。'],
+        poetry: '「菩提本无树，明镜亦非台。」—— 惠能《菩提偈》',
+        poetryAuthor: '唐代高僧'
+      }} />
 
         {/* Info Section */}
         <div className="mt-16 bg-white rounded-2xl p-8 shadow-lg border-l-4 border-[#D4A574]">

@@ -9,6 +9,7 @@ import { PhotoShare } from '@/components/PhotoShare';
 import { RouteGuide } from '@/components/RouteGuide';
 import { CommentSection } from '@/components/CommentSection';
 import { AIAssistant } from '@/components/AIAssistant';
+import { CulturalHeritageSection } from '@/components/CulturalHeritageSection';
 export default function Yangguan(props) {
   const attraction = {
     id: 'yangguan',
@@ -71,6 +72,14 @@ export default function Yangguan(props) {
 
         {/* 评论区域 */}
         <CommentSection attractionId={attraction.id} $w={props.$w} />
+
+        {/* 文化瑰宝区域 */}
+        <CulturalHeritageSection content={{
+        title: '阳关三叠 · 离别情深',
+        paragraphs: ['「阳」字，从阜，昜声。阜者，土山也；昜者，日出也。阳关，因位于玉门关之南，故名「阳关」。这里曾是丝绸之路南路必经的关隘，见证了无数商旅的往来和离别的场景。', '阳关始建于汉武帝时期，与玉门关同为汉代对西域和匈奴交通的门户。唐代诗人王维的「劝君更尽一杯酒，西出阳关无故人」使阳关名扬天下。这首诗不仅表达了诗人对友人的深情厚谊，更成为了中华文化中离别情怀的经典表达。', '如今阳关遗址虽已残破，但依然能感受到当年丝绸之路的繁华与沧桑。站在阳关遗址上，仿佛能看到千年前的商队缓缓西行，听到驼铃声声在戈壁中回荡。这里不仅有历史的厚重，更承载着中华民族开拓进取、不畏艰险的精神品格。'],
+        poetry: '「劝君更尽一杯酒，西出阳关无故人。」—— 王维《送元二使安西》',
+        poetryAuthor: '唐代诗人'
+      }} />
 
         {/* Info Section */}
         <div className="mt-16 bg-white rounded-2xl p-8 shadow-lg border-l-4 border-[#D4A574]">

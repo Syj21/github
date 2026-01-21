@@ -9,6 +9,7 @@ import { PhotoShare } from '@/components/PhotoShare';
 import { RouteGuide } from '@/components/RouteGuide';
 import { CommentSection } from '@/components/CommentSection';
 import { AIAssistant } from '@/components/AIAssistant';
+import { CulturalHeritageSection } from '@/components/CulturalHeritageSection';
 export default function SilkroadHeritage(props) {
   const attraction = {
     id: 'silkroad_heritage',
@@ -71,6 +72,14 @@ export default function SilkroadHeritage(props) {
 
         {/* 评论区域 */}
         <CommentSection attractionId={attraction.id} $w={props.$w} />
+
+        {/* 文化瑰宝区域 */}
+        <CulturalHeritageSection content={{
+        title: '丝路遗韵 · 文明交融',
+        paragraphs: ['「丝」字，从糸，从其。糸者，细丝也；其者，箕也。丝绸之路，是古代连接东西方的重要贸易通道，也是文明交流的桥梁。', '丝路遗产城，作为以丝绸之路文化为主题的大型文化旅游景区，复原了古代丝绸之路上的重要城市和建筑，包括长安城、敦煌古城、波斯集市等。在这里，游客仿佛穿越回千年前的丝绸之路，感受东西方文明的交融与碰撞。', '丝绸之路不仅是贸易之路，更是文化之路、友谊之路。它见证了中华文明的开放包容，也见证了不同文明之间的相互学习、相互借鉴。丝路遗产城通过丰富的文化表演和互动体验项目，让游客深入了解丝绸之路的历史文化，感受中华文明的博大精深和世界文明的多元共生。'],
+        poetry: '「海内存知己，天涯若比邻。」—— 王勃《送杜少府之任蜀州》',
+        poetryAuthor: '唐代诗人'
+      }} />
 
         {/* Info Section */}
         <div className="mt-16 bg-white rounded-2xl p-8 shadow-lg border-l-4 border-[#D4A574]">

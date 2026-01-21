@@ -10,6 +10,7 @@ import { RouteGuide } from '@/components/RouteGuide';
 import { CommentSection } from '@/components/CommentSection';
 import { ImageViewer } from '@/components/ImageViewer';
 import { AIAssistant } from '@/components/AIAssistant';
+import { CulturalHeritageSection } from '@/components/CulturalHeritageSection';
 export default function Yumen(props) {
   const attraction = {
     id: 3,
@@ -82,6 +83,14 @@ export default function Yumen(props) {
 
         {/* 评论区域 */}
         <CommentSection attractionId={attraction.id} $w={props.$w} />
+
+        {/* 文化瑰宝区域 */}
+        <CulturalHeritageSection content={{
+        title: '关山万里 · 丝路咽喉',
+        paragraphs: ['「关」字，从门，关声。门者，出入之要道；关者，守御之重地。玉门关，作为古代丝绸之路通往西域北道的咽喉要隘，见证了中华文明的开放与包容。', '玉门关，俗称小方盘城，始建于汉武帝时期。相传古代西域和田等地的美玉经此关口输入中原，故名「玉门关」。这里曾是商旅云集、驼铃声声的繁华之地，也是无数文人墨客抒发情怀的灵感之源。', '唐代诗人王之涣的「羌笛何须怨杨柳，春风不度玉门关」使玉门关名扬天下。诗句中的「春风」，不仅指自然界的春风，更象征着中原文明的温暖与繁荣。玉门关虽地处边陲，却始终是中华文明向西延伸的重要节点，承载着中华民族开拓进取、和平友好的精神品格。'],
+        poetry: '「羌笛何须怨杨柳，春风不度玉门关。」—— 王之涣《凉州词》',
+        poetryAuthor: '唐代诗人'
+      }} />
 
         {/* Info Section */}
         <div className="mt-16 bg-white rounded-2xl p-8 shadow-lg border-l-4 border-[#D4A574]">

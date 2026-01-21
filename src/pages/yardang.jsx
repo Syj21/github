@@ -10,6 +10,7 @@ import { RouteGuide } from '@/components/RouteGuide';
 import { CommentSection } from '@/components/CommentSection';
 import { ImageViewer } from '@/components/ImageViewer';
 import { AIAssistant } from '@/components/AIAssistant';
+import { CulturalHeritageSection } from '@/components/CulturalHeritageSection';
 export default function Yardang(props) {
   const attraction = {
     id: 4,
@@ -79,6 +80,14 @@ export default function Yardang(props) {
 
         {/* 评论区域 */}
         <CommentSection attractionId={attraction.id} $w={props.$w} />
+
+        {/* 文化瑰宝区域 */}
+        <CulturalHeritageSection content={{
+        title: '风蚀奇观 · 天地造化',
+        paragraphs: ['「雅」字，从隹，牙声。隹者，短尾鸟也；牙者，齿也。雅丹，维吾尔语意为「陡峭的小丘」，是风蚀地貌的典型代表。', '雅丹魔鬼城，又称雅丹国家地质公园，位于敦煌市西北180公里的罗布泊边缘。这里分布着各种形状奇特的风蚀地貌，有的像古城堡，有的像舰队出海，有的像动物造型。每当大风刮过，发出各种怪异的声音，仿佛鬼哭狼嚎，因此被称为「魔鬼城」。', '雅丹地貌的形成，是大自然千万年雕琢的结果。风，这位无形的艺术家，用时光为笔，以沙砾为墨，在戈壁滩上创作出这幅壮丽的画卷。这里不仅展现了自然界的神奇力量，更体现了中华民族敬畏自然、与自然和谐共生的智慧。站在雅丹魔鬼城，仿佛能听到远古的风声，感受到天地之间的浩渺与永恒。'],
+        poetry: '「大漠风尘日色昏，红旗半卷出辕门。」—— 王昌龄《从军行》',
+        poetryAuthor: '唐代诗人'
+      }} />
 
         {/* Info Section */}
         <div className="mt-16 bg-white rounded-2xl p-8 shadow-lg border-l-4 border-[#D4A574]">

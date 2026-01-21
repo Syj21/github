@@ -26,9 +26,9 @@ export function AIAssistant() {
     setInputValue('');
     setIsTyping(true);
     try {
-      // 调用OpenAI云函数，设置超时时间为25秒
+      // 调用DeepSeek云函数，设置超时时间为25秒
       const response = await $w.cloud.callFunction({
-        name: 'openai-chat',
+        name: 'deepseek-chat',
         data: {
           message: currentInput,
           history: messages.slice(-10).map(msg => ({

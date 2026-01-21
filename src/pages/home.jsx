@@ -139,6 +139,74 @@ export default function Home(props) {
       
       {/* Main Content */}
       <main className="max-w-7xl mx-auto px-6 py-16">
+        {/* 顶部欢迎区域 */}
+        <div className="relative mb-16 overflow-hidden">
+          {/* 装饰性背景 */}
+          <div className="absolute inset-0 bg-gradient-to-r from-[#D4A574]/5 via-[#E8A849]/5 to-[#C41E3A]/5 rounded-3xl" />
+          <div className="absolute top-0 right-0 w-64 h-64 bg-[#D4A574]/10 rounded-full blur-3xl" />
+          <div className="absolute bottom-0 left-0 w-48 h-48 bg-[#E8A849]/10 rounded-full blur-3xl" />
+          
+          {/* 装饰性几何元素 */}
+          <div className="absolute top-4 left-4 w-2 h-2 bg-[#D4A574]/30 rounded-full" />
+          <div className="absolute top-8 right-8 w-3 h-3 bg-[#E8A849]/30 rounded-full" />
+          <div className="absolute bottom-4 left-12 w-2 h-2 bg-[#C41E3A]/30 rounded-full" />
+          <div className="absolute bottom-8 right-16 w-3 h-3 bg-[#D4A574]/30 rounded-full" />
+          
+          <div className="relative z-10 p-8 md:p-12">
+            <div className="flex flex-col md:flex-row items-center justify-between gap-8">
+              {/* 左侧：欢迎文字 */}
+              <div className="flex-1 text-center md:text-left">
+                <div className="flex items-center gap-3 mb-4 justify-center md:justify-start">
+                  <div className="w-12 h-12 bg-gradient-to-br from-[#D4A574] to-[#E8A849] rounded-full flex items-center justify-center">
+                    <Sparkles className="w-6 h-6 text-white" />
+                  </div>
+                  <span className="text-[#D4A574] font-medium" style={{
+                    fontFamily: 'Noto Sans SC, sans-serif'
+                  }}>
+                    欢迎来到敦煌
+                  </span>
+                </div>
+                <h2 className="text-3xl md:text-4xl font-bold text-[#2C2C2C] mb-3" style={{
+                  fontFamily: 'Noto Serif SC, serif'
+                }}>
+                  探索千年丝路文化
+                </h2>
+                <p className="text-[#2C2C2C]/70 text-lg max-w-xl" style={{
+                  fontFamily: 'Noto Sans SC, sans-serif'
+                }}>
+                  在沙漠与绿洲的交汇处，感受东西方文化的完美融合
+                </p>
+              </div>
+              
+              {/* 右侧：统计数据 */}
+              <div className="flex gap-4 md:gap-6">
+                {stats.map((stat, index) => <div key={index} className="bg-white/80 backdrop-blur-sm rounded-2xl p-4 md:p-6 shadow-lg border border-[#D4A574]/20 hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
+                    <stat.icon className="w-6 h-6 text-[#D4A574] mx-auto mb-2" />
+                    <div className="text-xl md:text-2xl font-bold text-[#2C2C2C]" style={{
+                    fontFamily: 'Noto Serif SC, serif'
+                  }}>
+                      {stat.value}
+                    </div>
+                    <div className="text-xs md:text-sm text-[#2C2C2C]/70 text-center" style={{
+                    fontFamily: 'Noto Sans SC, sans-serif'
+                  }}>
+                      {stat.label}
+                    </div>
+                  </div>)}
+              </div>
+            </div>
+            
+            {/* 底部装饰线 */}
+            <div className="mt-8 flex items-center gap-4 justify-center">
+              <div className="w-16 h-0.5 bg-gradient-to-r from-transparent to-[#D4A574]/50" />
+              <div className="flex gap-2">
+                {[...Array(5)].map((_, i) => <div key={i} className={`w-2 h-2 rounded-full ${i === 2 ? 'bg-[#D4A574]' : 'bg-[#D4A574]/30'}`} />)}
+              </div>
+              <div className="w-16 h-0.5 bg-gradient-to-l from-transparent to-[#D4A574]/50" />
+            </div>
+          </div>
+        </div>
+
         {/* Attraction Navigation */}
         <div className="mb-16">
           <AttractionNav attractions={attractions} onNavigate={handleNavigate} />

@@ -126,7 +126,7 @@ export default function Home(props) {
       <AIAssistant />
 
       {/* 主内容区域 */}
-      <div className="min-h-screen bg-[#FDF8F3] pt-20">
+      <div className="min-h-screen bg-[#FDF8F3] pt-6">
       {/* 返回首页按钮 */}
       <div className="fixed top-6 left-6 z-50">
         <button onClick={handleBackToWelcome} className="bg-white/20 backdrop-blur-sm border border-white/30 text-white px-4 py-2 rounded-full font-medium hover:bg-white/30 transition-all duration-300 flex items-center gap-2 shadow-lg" style={{
@@ -138,9 +138,9 @@ export default function Home(props) {
       </div>
       
       {/* Main Content */}
-      <main className="max-w-7xl mx-auto px-6 py-16">
+      <main className="max-w-7xl mx-auto px-6 py-8">
         {/* 顶部欢迎区域 */}
-        <div className="relative mb-16 overflow-hidden">
+        <div className="relative mb-8 overflow-hidden">
           {/* 装饰性背景 */}
           <div className="absolute inset-0 bg-gradient-to-r from-[#D4A574]/5 via-[#E8A849]/5 to-[#C41E3A]/5 rounded-3xl" />
           <div className="absolute top-0 right-0 w-64 h-64 bg-[#D4A574]/10 rounded-full blur-3xl" />

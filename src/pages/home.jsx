@@ -216,6 +216,72 @@ export default function Home(props) {
         </div>
       </section>
 
+      {/* 过渡区域 - 装饰性图案 */}
+      <div className="relative bg-gradient-to-b from-[#D4A574] to-[#FDF8F3] overflow-hidden">
+        {/* 波浪图案层 */}
+        <div className="absolute inset-0">
+          <svg className="absolute bottom-0 w-full h-32" viewBox="0 0 1440 120" preserveAspectRatio="none">
+            <path fill="#FDF8F3" fillOpacity="1" d="M0,64L80,69.3C160,75,320,85,480,80C640,75,800,53,960,48C1120,43,1280,53,1360,58.7L1440,64L1440,120L1360,120C1280,120,1120,120,960,120C800,120,640,120,480,120C320,120,160,120,80,120L0,120Z"></path>
+          </svg>
+          <svg className="absolute bottom-0 w-full h-24" viewBox="0 0 1440 120" preserveAspectRatio="none" style={{
+            opacity: 0.5
+          }}>
+            <path fill="#E8A849" fillOpacity="0.3" d="M0,96L80,85.3C160,75,320,53,480,53.3C640,53,800,75,960,80C1120,85,1280,75,1360,69.3L1440,64L1440,120L1360,120C1280,120,1120,120,960,120C800,120,640,120,480,120C320,120,160,120,80,120L0,120Z"></path>
+          </svg>
+        </div>
+
+        {/* 装饰性元素 - 沙丘效果 */}
+        <div className="absolute inset-0 overflow-hidden">
+          <div className="absolute top-10 left-10 w-32 h-16 bg-[#E8A849]/20 rounded-full blur-xl" />
+          <div className="absolute top-20 right-20 w-40 h-20 bg-[#D4A574]/20 rounded-full blur-xl" />
+          <div className="absolute top-5 left-1/3 w-24 h-12 bg-[#C41E3A]/10 rounded-full blur-lg" />
+          <div className="absolute top-15 right-1/3 w-28 h-14 bg-[#E8A849]/15 rounded-full blur-lg" />
+        </div>
+
+        {/* 丝路元素装饰 */}
+        <div className="relative z-10 py-16 px-6">
+          <div className="max-w-7xl mx-auto">
+            <div className="flex items-center justify-center gap-8">
+              {/* 左侧装饰线 */}
+              <div className="hidden md:flex items-center gap-2">
+                <div className="w-16 h-0.5 bg-gradient-to-r from-transparent to-[#D4A574]" />
+                <div className="w-2 h-2 bg-[#D4A574] rounded-full" />
+                <div className="w-8 h-0.5 bg-[#D4A574]" />
+                <div className="w-1.5 h-1.5 bg-[#E8A849] rounded-full" />
+              </div>
+
+              {/* 中心图标和文字 */}
+              <div className="flex flex-col items-center gap-3">
+                <div className="bg-white/30 backdrop-blur-sm p-4 rounded-full shadow-lg">
+                  <Compass className="w-8 h-8 text-[#D4A574]" />
+                </div>
+                <div className="text-center">
+                  <h3 className="text-2xl font-bold text-white mb-1" style={{
+                    fontFamily: 'Noto Serif SC, serif',
+                    textShadow: '0 2px 10px rgba(0,0,0,0.2)'
+                  }}>
+                    开启探索之旅
+                  </h3>
+                  <p className="text-white/80 text-sm" style={{
+                    fontFamily: 'Noto Sans SC, sans-serif'
+                  }}>
+                    穿越千年时光，感受丝路魅力
+                  </p>
+                </div>
+              </div>
+
+              {/* 右侧装饰线 */}
+              <div className="hidden md:flex items-center gap-2">
+                <div className="w-1.5 h-1.5 bg-[#E8A849] rounded-full" />
+                <div className="w-8 h-0.5 bg-[#D4A574]" />
+                <div className="w-2 h-2 bg-[#D4A574] rounded-full" />
+                <div className="w-16 h-0.5 bg-gradient-to-l from-transparent to-[#D4A574]" />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
       {/* Main Content */}
       <main className="max-w-7xl mx-auto px-6 py-16">
         {/* Attraction Navigation */}
